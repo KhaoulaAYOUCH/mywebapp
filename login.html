@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion - Gestion des accès JESA</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(87deg, #00338e 0, #54a8c9 100%);
+      font-family: 'Open Sans', sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .auth-container {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(44,62,80,0.12);
+      padding: 40px 32px 32px 32px;
+      max-width: 350px;
+      width: 100%;
+      text-align: center;
+    }
+    .auth-container img {
+      width: 90px;
+      margin-bottom: 16px;
+    }
+    .auth-container h2 {
+      color: #00338e;
+      margin-bottom: 24px;
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .auth-form input {
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 7px;
+      font-size: 15px;
+      background: #f6f9fc;
+      outline: none;
+      transition: border 0.2s;
+    }
+    .auth-form input:focus {
+      border: 1.5px solid #00338e;
+    }
+    .auth-btn {
+      background: #00338e;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 12px 0;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+    .auth-btn:hover {
+      background: #0c007c;
+    }
+    .auth-error {
+      color: #f5365c;
+      font-size: 14px;
+      margin-top: 8px;
+      display: none;
+    }
+    @media (max-width: 500px) {
+      .auth-container { padding: 24px 8vw; }
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-container">
+    <img src="LOGOJESA.jpg" alt="Logo JESA">
+    <h2>Connexion à la plateforme</h2>
+    <form class="auth-form" id="loginForm" autocomplete="off">
+      <input type="text" id="username" placeholder="Nom d'utilisateur" required>
+      <input type="password" id="password" placeholder="Mot de passe" required>
+      <button type="submit" class="auth-btn">Connexion</button>
+      <div class="auth-error" id="authError">Nom d'utilisateur ou mot de passe incorrect.</div>
+    </form>
+  </div>
+  <script>
+    document.getElementById('loginForm').onsubmit = function(e) {
+      e.preventDefault();
+      // Demo: username = admin, password = admin123
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const errorDiv = document.getElementById('authError');
+      if(username === 'admin' && password === 'admin123') {
+        errorDiv.style.display = 'none';
+        window.location.href = 'index.html';
+      } else {
+        errorDiv.style.display = 'block';
+      }
+    };
+  </script>
+</body>
+</html>

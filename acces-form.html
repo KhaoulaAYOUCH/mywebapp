@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des autorisations d'accès au sites JESA</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Open Sans', sans-serif;
+            background: #f8f9fe;
+        }
+        .sidebar {
+            width: 270px;
+            background: #fff;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            box-shadow: 2px 0 10px rgba(44,62,80,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .sidebar .logo {
+            font-weight: bold;
+            font-size: 18px;
+            padding: 32px 0 24px 32px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #00338e;
+        }
+        .sidebar nav {
+            flex: 1;
+        }
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar nav ul li {
+            margin-bottom: 8px;
+        }
+        .sidebar nav ul li a {
+            display: flex;
+            align-items: center;
+            padding: 12px 32px;
+            color: #003ca5fd;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .sidebar nav ul li a.active, .sidebar nav ul li a:hover {
+            background: #f6f9fc;
+        }
+        .sidebar nav ul li a i {
+            margin-right: 16px;
+            font-size: 18px;
+        }
+        .main-content {
+            margin-left: 270px;
+            padding: 0;
+            min-height: 100vh;
+        }
+        .navbar {
+            background: linear-gradient(87deg, #00338e 0, #ffffff 100%);
+            color: #fff;
+            padding: 24px 40px 32px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .navbar .Logindata {
+            display: flex;
+            align-items: center;
+            gap: 100px;
+        }
+        .navbar .Logindata a{
+            color: #00338e;
+            font-weight: 1000;
+            text-decoration: none;
+            font-size: 15px;
+            text-align: center;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(44,62,80,0.08);
+            padding: 32px 40px 24px 40px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .header img {
+            width: 80px;
+            margin-bottom: 8px;
+        }
+        .header h2 {
+            margin: 0 0 8px 0;
+            font-size: 22px;
+            font-weight: 700;
+            color: #00338e;
+        }
+        .header p {
+            color: #888;
+            font-size: 16px;
+            margin: 0;
+        }
+        .form-section {
+            background: #f6f9fc;
+            border-radius: 12px;
+            padding: 24px 24px 8px 24px;
+            margin-bottom: 16px;
+        }
+        .form-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #00338e;
+            margin-bottom: 18px;
+        }
+        .form-row {
+            display: flex;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+        .form-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label {
+            font-size: 15px;
+            color: #00338e;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        .form-group input, .form-group select {
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 15px;
+            background: #fff;
+        }
+        .form-group input[type="file"] {
+            padding: 4px 0;
+        }
+        .form-group input:disabled {
+            background: #f0f0f0;
+        }
+        .radio-group {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 10px;
+        }
+        .radio-group label {
+            font-weight: 400;
+            color: #00338e;
+            margin: 0 8px 0 0;
+        }
+        .vehicle-section {
+            background: #f6f9fc;
+            border-radius: 10px;
+            padding: 18px 18px 8px 18px;
+            margin-bottom: 16px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-top: 18px;
+        }
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 8px;
+        }
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 18px;
+        }
+        .btn {
+            padding: 10px 32px;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-cancel {
+            background: #e0e0e0;
+            color: #333;
+        }
+        .btn-send {
+            background: #54a8c9;
+            color: #fff;
+        }
+        .btn-send:hover {
+            background: #0c007c;
+        }
+        .btn-invitation {
+            background-color: #28a745;
+            border-color: #28a745;
+            color: #fff;
+            transition: background 0.2s, border 0.2s;
+        }
+        .btn-invitation:hover {
+            background-color: #1e7e34;
+            border-color: #1e7e34;
+        }
+        #popupOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .popupContent {
+            background: #fff;
+            padding: 32px 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+            text-align: center;
+            max-width: 350px;
+            margin: auto;
+        }
+        .popupContent h2 {
+            color: #0a2342;
+            margin-bottom: 16px;
+        }
+        /* Invitation Popup Styles */
+        #invitationPopupOverlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.3);
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+        #invitationPopup {
+            background: #fff;
+            padding: 32px 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            text-align: center;
+            max-width: 350px;
+            margin: auto;
+        }
+        #invitationPopup input[type="email"] {
+            padding: 10px;
+            width: 80%;
+            margin-bottom: 16px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+        #invitationPopup .btn-send {
+            background-color: #28a745;
+            border-color: #28a745;
+            color: #fff;
+            margin-left: 0;
+        }
+        #invitationPopup .btn-send:hover {
+            background-color: #1e7e34;
+            border-color: #1e7e34;
+        }
+        @media (max-width: 900px) {
+            .container { padding: 18px 4vw; }
+            .form-row { flex-direction: column; gap: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div>
+            <div class="logo"><img src="LOGOJESA.jpg" width="100" height="50"> Gestionnaire des accés</div>
+            <nav>
+                <ul>
+                    <li><a href="index.html"><i class="fa fa-tv"></i> Dashboard</a></li>
+                    <li style="position:relative;">
+    <a href="#" id="accesPersonnelToggle" class="active" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+        <span><i class="fa fa-address-book"></i>Accés Personnel</span>
+        <i class="fa fa-caret-down" style="margin-left:8px;"></i>
+    </a>
+    <ul id="accesPersonnelMenu" style="display:none; position:absolute; left:0; top:40px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-radius:8px; list-style:none; margin:0; padding:8px 0; min-width:210px; z-index:2000;">
+        <li id="ajouterDemandePersonnel" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'" onclick="window.location.href='acces-form.html'"><i class="fa fa-plus"></i> Ajouter une demande d'acces</li>
+        <li id="suiviDemandesPersonnel" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'" onclick="window.location.href='table-demandes.html'"><i class="fa fa-clock"></i> Suivi des demandes d'acces</li>
+    </ul>
+    
+</li>
+                    <li style="position:relative;">
+    <a href="#" id="accesMaterielToggle" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+        <span><i class="fa fa-truck-field"></i>Accés Materiel</span>
+        <i class="fa fa-caret-down" style="margin-left:8px;"></i>
+    </a>
+    <ul id="accesMaterielMenu" style="display:none; position:absolute; left:0; top:40px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-radius:8px; list-style:none; margin:0; padding:8px 0; min-width:210px; z-index:2000;">
+        <li style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'"> <i class="fa fa-plus"></i> Générer un bon d'entrée-sortie</li>
+        <li style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'"> <i class="fa fa-clock"></i> Suivi des entrée-sortie</li>
+    </ul>
+</li>
+                    <li style="position:relative;">
+    <a href="#" id="suiviProjetsToggle" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+        <span><i class="fa fa-industry"></i>Suivi des projets</span>
+        <i class="fa fa-caret-down" style="margin-left:8px;"></i>
+    </a>
+    <ul id="suiviProjetsMenu" style="display:none; position:absolute; left:0; top:40px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-radius:8px; list-style:none; margin:0; padding:8px 0; min-width:210px; z-index:2000;">
+        <li id="ajouterProjet" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'"><i class="fa fa-plus"></i> Ajouter un projet</li>
+        <li id="mesProjets" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'"><i class="fa fa-folder-open"></i> Mes projets</li>
+    </ul>
+</li>
+                </ul>
+            </nav>
+        </div>
+        <button id="logoutSidebarBtn" title="Déconnexion" style="position: absolute; left: 18px; bottom: 24px; background:transparent; color:#f5365c; border:none; border-radius:50%; padding:8px; font-size:20px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center;"><i class="fa-solid fa-right-from-bracket"></i></button>
+    </div>
+    <div class="main-content">
+        <div class="navbar">Formulaire d'accès
+            <div class="Logindata" style="position: relative; display: flex; align-items: center; gap: 18px;">
+                <span id="userProfileArea" style="display: flex; align-items: center; gap: 8px; cursor:pointer; font-weight: 700; color: #00338e; font-size: 15px;">
+                    <i class="fa-solid fa-circle-user"></i>
+                    AYOUCH Khaoula
+                </span>
+                <span id="notificationBellArea" style="display: flex; align-items: center; gap: 4px; cursor:pointer; position:relative;">
+                    <i class="fa fa-bell" style="color:#f5365c; font-size:18px;"></i>
+                    <span id="notificationCount" style="background: #f5365c; color: #fff; border-radius: 50%; padding: 2px 7px; font-size: 12px; display: inline-block;">3</span>
+                    <div id="notificationDropdown" style="display:none; position:absolute; right:0; top:28px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-radius:8px; min-width:320px; z-index:2000; padding:0;">
+                        <div style="padding:12px 18px; border-bottom:1px solid #eee; font-weight:700; color:#00338e;">Notifications</div>
+                        <ul style="list-style:none; margin:0; padding:0;">
+                            <li style="padding:12px 18px; border-bottom:1px solid #f6f9fc; color:#32325d; display:flex; align-items:center;"><i class="fa fa-user-plus" style="color:#2dce89; margin-right:10px;"></i>Nouvelle demande d'accès soumise</li>
+                            <li style="padding:12px 18px; border-bottom:1px solid #f6f9fc; color:#32325d; display:flex; align-items:center;"><i class="fa fa-check-circle" style="color:#5e72e4; margin-right:10px;"></i>Demande approuvée</li>
+                            <li style="padding:12px 18px; color:#32325d; display:flex; align-items:center;"><i class="fa fa-times-circle" style="color:#f5365c; margin-right:10px;"></i>Demande rejetée</li>
+                        </ul>
+                    </div>
+                </span>
+            </div>
+        </div>
+        <div class="container">
+            <div class="header">
+                <img src="LOGOJESA.jpg" alt="JESA Logo">
+                <h2>PROCEDURE D'ACCÈS AU SITE</h2>
+                <p>Renseignez les informations ci-dessous pour demander l'accès au site</p>
+            </div>
+            <form>
+                <div class="form-section">
+                    <div class="form-title">Information Personnelle</div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nom">Nom *</label>
+                            <input type="text" id="nom" name="nom" >
+                        </div>
+                        <div class="form-group">
+                            <label for="prenom">Prénom *</label>
+                            <input type="text" id="prenom" name="prenom">
+                        </div>
+                        <div class="form-group">
+                            <label for="cin">Cin / Passport *</label>
+                            <input type="text" id="cin" name="cin">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="Sociéte">Société *</label>
+                            <input type="text" id="Sociéte" name="Sociéte" >
+                        </div>
+                        <div class="form-group">
+                            <label for="Statut">Statut *</label>
+                            <input type="text" id="Statut" name="Statut">
+                        </div>
+                        <div class="form-group">
+                            <label for="mission">Mission *</label>
+                            <input type="text" id="Mission" name="Mission">
+                        </div>
+                    </div>
+                        <div class="form-row">
+                        <div class="form-group">
+                            <label for="Projet">Projet *</label>
+                            <select id="Projet" name="Projet" style="width:100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 7px; font-size: 15px; background: #fff;">
+                                <option value="">Sélectionner un projet</option>
+                                <option value="Laayoune Waship Plant">Laayoune Waship Plant</option>
+                                <option value="PFC TSP">PFC TSP</option>
+                                <option value="PFC PAP">PFC PAP</option>
+                                <option value="Laayoune Port">Laayoune Port</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="datedebut">Date de début *</label>
+                            <input type="date" id="datedebut" name="datedebut">
+                        </div>
+                        <div class="form-group">
+                            <label for="datefin">Date de fin *</label>
+                            <input type="date" id="datefin" name="datefin">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="photo">Copie de CIN <span style="color:#888;font-weight:400;font-size:13px;">(Taille maximale: 2Mo)</span></label>
+                            <input type="file" id="photo" name="photo" accept="image/*,application/pdf" onchange="updateFileName()">
+                            <a id="uploadedFileName" href="#" style="font-size:13px;color:#009e3c;text-decoration:underline;display:none;"></a>
+                        </div>
+                        <div class="form-group">
+                            <label for="telephone">Téléphone *</label>
+                            <input type="text" id="telephone" name="telephone">
+                        </div>
+                        <div class="form-group">
+                            <label for="nationalite">Nationalité *</label>
+                            <select id="nationalite" name="nationalite" required>
+                                <option value="Marocain" >Marocain</option>
+                                <option value="Etranger">Etranger</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-section">
+                    <div class="form-title">Avez-vous une voiture ?</div>
+                    <div class="radio-group">
+                        <input type="radio" id="voitureOui" name="voiture" value="oui" >
+                        <label for="voitureOui">Oui</label>
+                        <input type="radio" id="voitureNon" name="voiture" value="non"checked>
+                        <label for="voitureNon">Non</label>
+                    </div>
+                    <div class="vehicle-section" id="vehicleInfo">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="marque">Marque</label>
+                                <select id="marque" name="marque">
+                                    <option value="">Selectionner la marque</option>
+                                    <option value="Renault">Renault</option>
+                                    <option value="Peugeot">Peugeot</option>
+                                    <option value="Toyota">Toyota</option>
+                                    <option value="Hyundai">Hyundai</option>
+                                    <option value="Autre">Autre</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="modele">Modèle</label>
+                                <select id="modele" name="modele">
+                                    <option value="">Selection le modèle</option>
+                                    <option value="Clio">Clio</option>
+                                    <option value="208">208</option>
+                                    <option value="Corolla">Corolla</option>
+                                    <option value="i20">i20</option>
+                                    <option value="Autre">Autre</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="matricule">Matricule *</label>
+                                <input type="text" id="matricule" name="matricule" placeholder="registration_plate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="couleur">Color</label>
+                                <input type="text" id="couleur" name="couleur" placeholder="color">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-section">
+                    <div class="form-title">Apportez-vous quelque chose ?</div>
+                    <div class="radio-group">
+                        <input type="radio" id="apportOui" name="apport" value="oui">
+                        <label for="apportOui">Oui</label>
+                        <input type="radio" id="apportNon" name="apport" value="non" checked>
+                        <label for="apportNon">Non</label>
+                    </div>
+                    <div id="apportDetails" style="display:none; margin-top:16px;">
+                        <div class="form-group">
+                            <label for="apportType">Type d'objet</label>
+                            <select id="apportType" name="apportType" style="width:100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 7px; font-size: 15px; background: #fff;">
+                                <option value="">Sélectionner le bien</option>
+                                <option value="Ordinateur">Valise</option>
+                                <option value="Téléphone">EPI</option>
+                                <option value="Outils">Outils</option>
+                                <option value="Autre">Autre</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="apportComment">Commentaire</label>
+                            <textarea id="apportComment" name="apportComment" rows="2" style="width:100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 7px; font-size: 15px; background: #fff;"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="cgu" name="cgu" required>
+                    <label for="cgu">J'ai lu et j'accepte les conditions d'utilisation</label>
+                </div>
+                <div class="form-actions" style="display: flex; gap: 12px;">
+                    <button type="button" class="btn btn-cancel" onclick="window.location.href='index.html'">Annuler</button>
+                    <button type="submit" class="btn btn-send" onclick="showPopup(event)">Valider</button>
+                    <button type="button" class="btn btn-invitation" style="margin-left: 0;">Invitation</button>
+                </div>
+            </form>
+        </div>
+        <div id="popupOverlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.3); align-items:center; justify-content:center; z-index:1000;">
+          <div style="background:#fff; padding:32px 40px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.12); text-align:center; max-width:350px; margin:auto;">
+            <h2 style="color:#0a2342; margin-bottom:16px;">Votre demande est ajoutée avec succès</h2>
+          </div>
+        </div>
+        <div id="invitationPopupOverlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.3); align-items:center; justify-content:center; z-index:2000;">
+          <div id="invitationPopup" style="background:#fff; padding:32px 40px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.12); text-align:center; max-width:350px; margin:auto;">
+            <h2 style="color:#0a2342; margin-bottom:16px;">Envoyer une invitation</h2>
+            <input type="email" id="invitationEmail" placeholder="Entrer l'email" required>
+            <br />
+            <button class="btn btn-send" id="sendInvitationBtn">Envoyer</button>
+          </div>
+        </div>
+    </div>
+    <script>
+        // Dropdowns for sidebar
+        document.addEventListener('DOMContentLoaded', function() {
+            var toggle = document.getElementById('userMenuToggle');
+            var menu = document.getElementById('userMenu');
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+            });
+            document.addEventListener('click', function(e) {
+                if (!toggle.contains(e.target) && !menu.contains(e.target)) {
+                    menu.style.display = 'none';
+                }
+            });
+            // Accès Personnel Dropdown
+            var accesToggle = document.getElementById('accesPersonnelToggle');
+            var accesMenu = document.getElementById('accesPersonnelMenu');
+            if (accesToggle && accesMenu) {
+                accesToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    accesMenu.style.display = (accesMenu.style.display === 'block') ? 'none' : 'block';
+                });
+                document.addEventListener('click', function(e) {
+                    if (!accesToggle.contains(e.target) && !accesMenu.contains(e.target)) {
+                        accesMenu.style.display = 'none';
+                    }
+                });
+            }
+            // Accès Materiel Dropdown
+            var materielToggle = document.getElementById('accesMaterielToggle');
+            var materielMenu = document.getElementById('accesMaterielMenu');
+            if (materielToggle && materielMenu) {
+                materielToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    materielMenu.style.display = (materielMenu.style.display === 'block') ? 'none' : 'block';
+                });
+                document.addEventListener('click', function(e) {
+                    if (!materielToggle.contains(e.target) && !materielMenu.contains(e.target)) {
+                        materielMenu.style.display = 'none';
+                    }
+                });
+            }
+            // Suivi Projets Dropdown
+            var projetToggle = document.getElementById('suiviProjetsToggle');
+            var projetMenu = document.getElementById('suiviProjetsMenu');
+            if (projetToggle && projetMenu) {
+                projetToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    projetMenu.style.display = (projetMenu.style.display === 'block') ? 'none' : 'block';
+                });
+                document.addEventListener('click', function(e) {
+                    if (!projetToggle.contains(e.target) && !projetMenu.contains(e.target)) {
+                        projetMenu.style.display = 'none';
+                    }
+                });
+            }
+        });
+        // Sidebar dropdown logic (robust, unified)
+        const accesPersonnelToggle = document.getElementById('accesPersonnelToggle');
+        const accesPersonnelMenu = document.getElementById('accesPersonnelMenu');
+        const accesMaterielToggle = document.getElementById('accesMaterielToggle');
+        const accesMaterielMenu = document.getElementById('accesMaterielMenu');
+        const suiviProjetsToggle = document.getElementById('suiviProjetsToggle');
+        const suiviProjetsMenu = document.getElementById('suiviProjetsMenu');
+        const ajouterProjet = document.getElementById('ajouterProjet');
+
+        function closeAllDropdowns(e) {
+            if (
+                (!accesPersonnelToggle.contains(e.target) && !accesPersonnelMenu.contains(e.target)) &&
+                (!accesMaterielToggle.contains(e.target) && !accesMaterielMenu.contains(e.target)) &&
+                (!suiviProjetsToggle.contains(e.target) && !suiviProjetsMenu.contains(e.target))
+            ) {
+                accesPersonnelMenu.style.display = 'none';
+                accesMaterielMenu.style.display = 'none';
+                suiviProjetsMenu.style.display = 'none';
+            }
+        }
+
+        if (accesPersonnelToggle && accesPersonnelMenu) {
+            accesPersonnelToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                accesPersonnelMenu.style.display = accesPersonnelMenu.style.display === 'block' ? 'none' : 'block';
+                accesMaterielMenu.style.display = 'none';
+                suiviProjetsMenu.style.display = 'none';
+            });
+        }
+        if (accesMaterielToggle && accesMaterielMenu) {
+            accesMaterielToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                accesMaterielMenu.style.display = accesMaterielMenu.style.display === 'block' ? 'none' : 'block';
+                accesPersonnelMenu.style.display = 'none';
+                suiviProjetsMenu.style.display = 'none';
+            });
+        }
+        if (suiviProjetsToggle && suiviProjetsMenu) {
+            suiviProjetsToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                suiviProjetsMenu.style.display = suiviProjetsMenu.style.display === 'block' ? 'none' : 'block';
+                accesPersonnelMenu.style.display = 'none';
+                accesMaterielMenu.style.display = 'none';
+            });
+        }
+        document.addEventListener('click', closeAllDropdowns);
+        // Ajouter un projet
+        if (ajouterProjet) {
+            ajouterProjet.addEventListener('click', function() {
+                window.location.href = 'Project-form.html';
+            });
+        }
+        // Show/hide vehicle info
+        const voitureOui = document.getElementById('voitureOui');
+        const voitureNon = document.getElementById('voitureNon');
+        const vehicleInfo = document.getElementById('vehicleInfo');
+        function toggleVehicleInfo() {
+            vehicleInfo.style.display = voitureOui.checked ? 'block' : 'none';
+        }
+        voitureOui.addEventListener('change', toggleVehicleInfo);
+        voitureNon.addEventListener('change', toggleVehicleInfo);
+        toggleVehicleInfo();
+        // Update file name display
+        function updateFileName() {
+            var input = document.getElementById('photo');
+            var fileName = input.files.length > 0 ? input.files[0].name : '';
+            var link = document.getElementById('uploadedFileName');
+            if (fileName) {
+                link.textContent = fileName;
+                link.style.display = 'inline';
+            } else {
+                link.textContent = '';
+                link.style.display = 'none';
+            }
+        }
+        // Show popup
+        function showPopup(e) {
+            e.preventDefault();
+            var popup = document.getElementById('popupOverlay');
+            popup.style.display = 'flex';
+            // Hide on click anywhere or after 5 seconds
+            function hidePopup() {
+                popup.style.display = 'none';
+                document.removeEventListener('mousedown', hidePopup);
+            }
+            setTimeout(hidePopup, 5000);
+            setTimeout(function() {
+                document.removeEventListener('mousedown', hidePopup);
+            }, 5000);
+            setTimeout(function() {
+                document.addEventListener('mousedown', hidePopup);
+            }, 10);
+        }
+        // Invitation popup logic
+        document.addEventListener('DOMContentLoaded', function() {
+            var invitationBtn = document.querySelector('.btn-invitation');
+            var invitationPopupOverlay = document.getElementById('invitationPopupOverlay');
+            var sendInvitationBtn = document.getElementById('sendInvitationBtn');
+            var invitationEmail = document.getElementById('invitationEmail');
+
+            invitationBtn.addEventListener('click', function() {
+                invitationPopupOverlay.style.display = 'flex';
+                invitationEmail.value = '';
+                invitationEmail.style.border = '';
+            });
+            // Hide popup when clicking outside the popup box
+            invitationPopupOverlay.addEventListener('mousedown', function(e) {
+                if (e.target === invitationPopupOverlay) {
+                    invitationPopupOverlay.style.display = 'none';
+                }
+            });
+            sendInvitationBtn.addEventListener('click', function() {
+                if (invitationEmail.value.trim() === '' || !invitationEmail.value.includes('@')) {
+                    invitationEmail.style.border = '1px solid red';
+                    return;
+                }
+                sendInvitationBtn.disabled = true;
+                sendInvitationBtn.textContent = 'Envoi...';
+                // Send email using EmailJS
+                emailjs.send('service_aznzxvf', 'template_0v0ot6g', {
+                    email: invitationEmail.value // changed from to_email to email
+                })
+                .then(function(response) {
+                    sendInvitationBtn.textContent = 'Envoyé!';
+                    setTimeout(function() {
+                        invitationPopupOverlay.style.display = 'none';
+                        sendInvitationBtn.textContent = 'Envoyer';
+                        sendInvitationBtn.disabled = false;
+                    }, 1500);
+                }, function(error) {
+                    console.error('EmailJS error:', error);
+                    sendInvitationBtn.textContent = 'Erreur';
+                    setTimeout(function() {
+                        sendInvitationBtn.textContent = 'Envoyer';
+                        sendInvitationBtn.disabled = false;
+                    }, 2000);
+                });
+            });
+        });
+        // Close invitation popup
+        function closeInvitationPopup() {
+            document.getElementById('invitationPopupOverlay').style.display = 'none';
+        }
+        // Send invitation
+        function sendInvitation() {
+            var email = document.getElementById('inviteEmail').value;
+            if (email) {
+                // Here you can add the code to send the invitation, e.g., an AJAX request
+                alert('Invitation envoyée à ' + email);
+                closeInvitationPopup();
+            } else {
+                alert('Veuillez entrer un email valide');
+            }
+        }
+        // Show/hide apport details
+        const apportOui = document.getElementById('apportOui');
+        const apportNon = document.getElementById('apportNon');
+        const apportDetails = document.getElementById('apportDetails');
+        function toggleApportDetails() {
+            apportDetails.style.display = apportOui.checked ? 'block' : 'none';
+        }
+        apportOui.addEventListener('change', toggleApportDetails);
+        apportNon.addEventListener('change', toggleApportDetails);
+        toggleApportDetails();
+        // Sidebar logout
+        const logoutSidebarBtn = document.getElementById('logoutSidebarBtn');
+        if(logoutSidebarBtn) {
+            logoutSidebarBtn.addEventListener('click', function() {
+                window.location.href = 'login.html';
+            });
+        }
+        // Notification bell
+        const notificationBell = document.querySelector('#notificationBellArea');
+        const notificationDropdown = document.querySelector('#notificationDropdown');
+        if (notificationBell && notificationDropdown) {
+            notificationBell.addEventListener('click', (e) => {
+                e.stopPropagation();
+                notificationDropdown.style.display = notificationDropdown.style.display === 'block' ? 'none' : 'block';
+            });
+            document.addEventListener('click', (e) => {
+                if (!notificationBell.contains(e.target) && !notificationDropdown.contains(e.target)) {
+                    notificationDropdown.style.display = 'none';
+                }
+            });
+        }
+        // User profile
+        const userProfileArea = document.getElementById('userProfileArea');
+        if (userProfileArea) {
+            userProfileArea.addEventListener('click', function() {
+                window.location.href = 'profile.html';
+            });
+        }
+    </script>
+    <!-- Remove old EmailJS SDK -->
+    <!-- <script src="https://cdn.emailjs.com/dist/email.min.js"></script> -->
+    
+    <!-- Add latest EmailJS SDK (browser version) -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>
+      emailjs.init("yH6GCY4CHdeNhXs6t"); // Your actual User ID
+    </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!-- Sidebar HTML extracted from index.html -->
+<div class="sidebar">
+    <div>
+        <div class="logo"><img src="LOGOJESA.jpg" width="100" height="50"> Gestionnaire des accés</div>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="active"><i class="fa fa-tv"></i> Dashboard</a></li>
+                <li style="position:relative;">
+                    <a href="#" id="accesPersonnelToggle" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+                        <span><i class="fa fa-address-book"></i>Accés Personnel</span>
+                        <i class="fa fa-caret-down" style="margin-left:8px;"></i>
+                    </a>
+                    <ul id="accesPersonnelMenu" style="display:none; position:absolute; left:0; top:40px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-radius:8px; list-style:none; margin:0; padding:8px 0; min-width:210px; z-index:2000;">
+                        <li id="ajouterDemandePersonnel" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'" onclick="window.location.href='acces-form.html'"><i class="fa fa-plus"></i> Ajouter une demande d'acces</li>
+                        <li id="suiviDemandesPersonnel" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'" onclick="window.location.href='table-demandes.html'"><i class="fa fa-clock"></i> Suivi des demandes d'acces</li>
+                    </ul>
+                </li>
+                <li style="position:relative;">
+                    <a href="#" id="accesMaterielToggle" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+                        <span><i class="fa fa-truck-field"></i>Accés Materiel</span>
+                        <i class="fa fa-caret-down" style="margin-left:8px;"></i>
+                    </a>
+                    <ul id="accesMaterielMenu" style="display:none; position:absolute; left:0; top:40px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-radius:8px; list-style:none; margin:0; padding:8px 0; min-width:210px; z-index:2000;">
+                        <li style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'"> <i class="fa fa-plus"></i> Générer un bon d'entrée-sortie</li>
+                        <li style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'"> <i class="fa fa-clock"></i> Suivi des entrée-sortie</li>
+                    </ul>
+                </li>
+                <li style="position:relative;">
+                    <a href="#" id="suiviProjetsToggle" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+                        <span><i class="fa fa-industry"></i>Suivi des projets</span>
+                        <i class="fa fa-caret-down" style="margin-left:8px;"></i>
+                    </a>
+                    <ul id="suiviProjetsMenu" style="display:none; position:absolute; left:0; top:40px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-radius:8px; list-style:none; margin:0; padding:8px 0; min-width:210px; z-index:2000;">
+                        <li id="ajouterProjet" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'"><i class="fa fa-plus"></i> Ajouter un projet</li>
+                        <li id="mesProjets" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'"><i class="fa fa-folder-open"></i> Mes projets</li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <button id="logoutSidebarBtn" title="Déconnexion" style="position: absolute; left: 18px; bottom: 24px; background:transparent; color:#f5365c; border:none; border-radius:50%; padding:8px; font-size:20px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center;"><i class="fa-solid fa-right-from-bracket"></i></button>
+</div>

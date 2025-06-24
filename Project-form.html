@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des autorisations d'accès au sites JESA</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Open Sans', sans-serif;
+            background: #f8f9fe;
+        }
+        .sidebar {
+            width: 270px;
+            background: #fff;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            box-shadow: 2px 0 10px rgba(44,62,80,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .sidebar .logo {
+            font-weight: bold;
+            font-size: 18px;
+            padding: 32px 0 24px 32px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #00338e;
+        }
+        .sidebar nav {
+            flex: 1;
+        }
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar nav ul li {
+            margin-bottom: 8px;
+        }
+        .sidebar nav ul li a {
+            display: flex;
+            align-items: center;
+            padding: 12px 32px;
+            color: #003ca5fd;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .sidebar nav ul li a.active, .sidebar nav ul li a:hover {
+            background: #f6f9fc;
+        }
+        .sidebar nav ul li a i {
+            margin-right: 16px;
+            font-size: 18px;
+        }
+        .main-content {
+            margin-left: 270px;
+            padding: 0;
+            min-height: 100vh;
+        }
+        .navbar {
+            background: linear-gradient(87deg, #00338e 0, #ffffff 100%);
+            color: #fff;
+            padding: 24px 40px 32px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .navbar .Logindata {
+            display: flex;
+            align-items: center;
+            gap: 100px;
+        }
+        .navbar .Logindata a{
+            color: #00338e;
+            font-weight: 1000;
+            text-decoration: none;
+            font-size: 15px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(44,62,80,0.08);
+            padding: 32px 40px 24px 40px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .header img {
+            width: 80px;
+            margin-bottom: 8px;
+        }
+        .header h2 {
+            margin: 0 0 8px 0;
+            font-size: 22px;
+            font-weight: 700;
+            color: #00338e;
+        }
+        .header p {
+            color: #888;
+            font-size: 16px;
+            margin: 0;
+        }
+        .form-section {
+            background: #f6f9fc;
+            border-radius: 12px;
+            padding: 24px 24px 8px 24px;
+            margin-bottom: 16px;
+        }
+        .form-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #00338e;
+            margin-bottom: 18px;
+        }
+        .form-row {
+            display: flex;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+        .form-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label {
+            font-size: 15px;
+            color: #00338e;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        .form-group input, .form-group select {
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 15px;
+            background: #fff;
+        }
+        .form-group input[type="file"] {
+            padding: 4px 0;
+        }
+        .form-group input:disabled {
+            background: #f0f0f0;
+        }
+        .radio-group {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 10px;
+        }
+        .radio-group label {
+            font-weight: 400;
+            color: #00338e;
+            margin: 0 8px 0 0;
+        }
+        .vehicle-section {
+            background: #f6f9fc;
+            border-radius: 10px;
+            padding: 18px 18px 8px 18px;
+            margin-bottom: 16px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-top: 18px;
+        }
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 8px;
+        }
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 16px;
+            margin-top: 18px;
+        }
+        .btn {
+            padding: 10px 32px;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-cancel {
+            background: #e0e0e0;
+            color: #333;
+        }
+        .btn-send {
+            background: #54a8c9;
+            color: #fff;
+        }
+        .btn-send:hover {
+            background: #0c007c;
+        }
+        #popupOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .popupContent {
+            background: #fff;
+            padding: 32px 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+            text-align: center;
+            max-width: 350px;
+            margin: auto;
+        }
+        .popupContent h2 {
+            color: #0a2342;
+            margin-bottom: 16px;
+        }
+        /* Extension Project Code Popup */
+        #extensionPopup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+        #extensionPopup .popupContent {
+            max-width: 350px;
+            width: 80%;
+            padding: 32px 24px;
+        }
+        @media (max-width: 900px) {
+            .container { padding: 18px 4vw; }
+            .form-row { flex-direction: column; gap: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div>
+            <div class="logo"><img src="LOGOJESA.jpg" width="100" height="50"> Gestionnaire des accés</div>
+            <nav>
+                <ul>
+                    <li><a href="index.html"><i class="fa fa-tv"></i> Dashboard</a></li>
+                    <li style="position:relative;">
+    <a href="#" id="accesPersonnelToggle" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+        <span><i class="fa fa-address-book"></i>Accés Personnel</span>
+        <i class="fa fa-caret-down" style="margin-left:8px;"></i>
+    </a>
+    <ul id="accesPersonnelMenu" style="display:none; position:absolute; left:0; top:40px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-radius:8px; list-style:none; margin:0; padding:8px 0; min-width:210px; z-index:2000;">
+        <li id="ajouterDemandePersonnel" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'" onclick="window.location.href='acces-form.html'"><i class="fa fa-plus"></i> Ajouter une demande d'acces</li>
+        <li id="suiviDemandesPersonnel" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'" onclick="window.location.href='table-demandes.html'"><i class="fa fa-clock"></i> Suivi des demandes d'acces</li>
+    </ul>
+    
+</li>
+                    <li style="position:relative;">
+    <a href="#" id="accesMaterielToggle" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+        <span><i class="fa fa-truck-field"></i>Accés Materiel</span>
+        <i class="fa fa-caret-down" style="margin-left:8px;"></i>
+    </a>
+    <ul id="accesMaterielMenu" style="display:none; position:absolute; left:0; top:40px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-radius:8px; list-style:none; margin:0; padding:8px 0; min-width:210px; z-index:2000;">
+        <li style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'"> <i class="fa fa-plus"></i> Générer un bon d'entrée-sortie</li>
+        <li style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'"> <i class="fa fa-clock"></i> Suivi des entrée-sortie</li>
+    </ul>
+</li>
+                    <li style="position:relative;">
+    <a href="#" id="suiviProjetsToggle" class="active" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+        <span><i class="fa fa-industry"></i>Suivi des projets</span>
+        <i class="fa fa-caret-down" style="margin-left:8px;"></i>
+    </a>
+    <ul id="suiviProjetsMenu" style="display:none; position:absolute; left:0; top:40px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-radius:8px; list-style:none; margin:0; padding:8px 0; min-width:210px; z-index:2000;">
+        <li id="ajouterProjet" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'"><i class="fa fa-plus"></i> Ajouter un projet</li>
+        <li id="mesProjets" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'"><i class="fa fa-folder-open"></i> Mes projets</li>
+    </ul>
+</li>
+                </ul>
+            </nav>
+        </div>
+        <button id="logoutSidebarBtn" title="Déconnexion" style="position: absolute; left: 18px; bottom: 24px; background:transparent; color:#f5365c; border:none; border-radius:50%; padding:8px; font-size:20px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center;"><i class="fa-solid fa-right-from-bracket"></i></button>
+    </div>
+    <div class="main-content">
+        <div class="navbar">Formulaire de projet
+            <div class="Logindata" style="position: relative; display: flex; align-items: center; gap: 18px;">
+                <span id="userProfileArea" style="display: flex; align-items: center; gap: 8px; cursor:pointer; font-weight: 700; color: #00338e; font-size: 15px;">
+                    <i class="fa-solid fa-circle-user"></i>
+                    AYOUCH Khaoula
+                </span>
+                <span id="notificationBellArea" style="display: flex; align-items: center; gap: 4px; cursor:pointer; position:relative;">
+                    <i class="fa fa-bell" style="color:#f5365c; font-size:18px;"></i>
+                    <span id="notificationCount" style="background: #f5365c; color: #fff; border-radius: 50%; padding: 2px 7px; font-size: 12px; display: inline-block;">3</span>
+                    <div id="notificationDropdown" style="display:none; position:absolute; right:0; top:28px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-radius:8px; min-width:320px; z-index:2000; padding:0;">
+                        <div style="padding:12px 18px; border-bottom:1px solid #eee; font-weight:700; color:#00338e;">Notifications</div>
+                        <ul style="list-style:none; margin:0; padding:0;">
+                            <li style="padding:12px 18px; border-bottom:1px solid #f6f9fc; color:#32325d; display:flex; align-items:center;"><i class="fa fa-user-plus" style="color:#2dce89; margin-right:10px;"></i>Nouvelle demande d'accès soumise</li>
+                            <li style="padding:12px 18px; border-bottom:1px solid #f6f9fc; color:#32325d; display:flex; align-items:center;"><i class="fa fa-check-circle" style="color:#5e72e4; margin-right:10px;"></i>Demande approuvée</li>
+                            <li style="padding:12px 18px; color:#32325d; display:flex; align-items:center;"><i class="fa fa-times-circle" style="color:#f5365c; margin-right:10px;"></i>Demande rejetée</li>
+                        </ul>
+                    </div>
+                </span>
+            </div>
+        </div>
+        <div class="container">
+            <div class="header">
+                <img src="LOGOJESA.jpg" alt="JESA Logo">
+                <h2>PROCEDURE D'ACCÈS AU SITE</h2>
+                <p>Renseignez les informations ci-dessous pour ajouter un projet </p>
+            </div>
+            <form>
+                <div class="form-section">
+                    <div class="form-title" id="mainProjectTitle">Détails du projet</div>
+                    <div class="radio-group" style="margin-bottom:18px;">
+                        <input type="radio" id="nouvelProjet" name="typeProjet" value="nouvel" checked>
+                        <label for="nouvelProjet">Nouveau projet</label>
+                        <input type="radio" id="extensionProjet" name="typeProjet" value="extension">
+                        <label for="extensionProjet">Extension</label>
+                    </div>
+                    <div id="extensionDisplayFields" class="form-section" style="display:none; background:#f6f9fc; border-radius:12px; padding:24px 24px 8px 24px; margin-bottom:16px; box-shadow:none; max-width:none; margin:0 0 16px 0;">
+    <div class="form-row">
+        <div class="form-group">
+            <label for="codeProjetExtDisplay">Code de projet *</label>
+            <input type="text" id="codeProjetExtDisplay" name="codeProjetExtDisplay" value="EX123" readonly>
+        </div>
+        <div class="form-group">
+            <label for="entituleProjetExtDisplay">Intitulé  du projet *</label>
+            <input type="text" id="entituleProjetExtDisplay" name="entituleProjetExtDisplay" value="Exemple Projet" readonly>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="zoneExtDisplay">Zone *</label>
+            <input type="text" id="zoneExtDisplay" name="zoneExtDisplay" value="Laayoune" readonly>
+        </div>
+        <div class="form-group">
+            <label for="siteExtDisplay">Site *</label>
+            <input type="text" id="siteExtDisplay" name="siteExtDisplay" value="Phosboucraa" readonly>
+        </div>
+        <div class="form-group">
+            <label for="secteurExtDisplay">Secteur *</label>
+            <input type="text" id="secteurExtDisplay" name="secteurExtDisplay" value="Minning" readonly>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="dateDebutProjetExtDisplay">Date début de projet *</label>
+            <input type="date" id="dateDebutProjetExtDisplay" name="dateDebutProjetExtDisplay" readonly>
+        </div>
+        <div class="form-group">
+            <label for="dateFinProjetExtDisplay">Date du fin de projet *</label>
+            <input type="date" id="dateFinProjetExtDisplay" name="dateFinProjetExtDisplay">
+        </div>
+    </div>
+</div>
+                    <div id="nouvelProjetFields">
+    <div class="form-row">
+        <div class="form-group">
+            <label for="codeProjet">Code de projet *</label>
+            <input type="text" id="codeProjet" name="codeProjet">
+        </div>
+        <div class="form-group">
+            <label for="entituleProjet">Intitulé  du projet *</label>
+            <input type="text" id="entituleProjet" name="entituleProjet">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="zone">Zone *</label>
+            <select id="zone" name="zone" required>
+                <option value="">Sélectionner</option>
+                <option value="el_jadida">El Jadida</option>
+                <option value="casa">Casa</option>
+                <option value="safi">Safi</option>
+                <option value="benguerir">Benguerir</option>
+                <option value="laayoune">Laayoune</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="site">Site *</label>
+            <select id="site" name="site" required>
+                <option value="">Sélectionner</option>
+                <option value="el_jorf">El Jorf</option>
+                <option value="ain_sebaa">Ain Sebaa</option>
+                <option value="zenata">Zenata</option>
+                <option value="safi_port">Safi Port</option>
+                <option value="benguerir_site">Benguerir Site</option>
+                <option value="phosboucraa">Phosboucraa</option>
+                <option value="boucraa">Boucraa</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="secteur">Secteur *</label>
+            <select id="secteur" name="secteur">
+                <option value="">Sélectionner</option>
+                <option value="Minning">Minning</option>
+                <option value="Building">Building</option>
+                <option value="Water">Water</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="dateDebutProjet">Date début de projet *</label>
+            <input type="date" id="dateDebutProjet" name="dateDebutProjet">
+        </div>
+        <div class="form-group">
+            <label for="dateFinProjet">Date du fin de projet *</label>
+            <input type="date" id="dateFinProjet" name="dateFinProjet">
+        </div>
+    </div>
+</div>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="cgu" name="cgu" required>
+                    <label for="cgu">J'ai lu et j'accepte les conditions d'utilisation</label>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-cancel" onclick="window.location.href='index.html'">Annuler</button>
+                    <button type="submit" class="btn btn-send" id="mainSubmitBtn">Valider</button>
+                </div>
+            </form>
+        </div>
+        <div id="popupOverlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.3); align-items:center; justify-content:center; z-index:1000;">
+          <div style="background:#fff; padding:32px 40px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.12); text-align:center; max-width:350px; margin:auto;">
+            <h2 style="color:#0a2342; margin-bottom:16px;">Votre projet est ajouté avec succès</h2>
+          </div>
+        </div>
+        <!-- Extension Project Code Popup -->
+        <div id="extensionPopup" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.3); align-items:center; justify-content:center; z-index:2000;">
+          <div style="background:#fff; padding:32px 40px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.12); text-align:center; max-width:350px; margin:auto;">
+            <h2 style="color:#0a2342; margin-bottom:16px;">Entrer le code du projet</h2>
+            <input type="text" id="popupCodeProjet" placeholder="Code de projet" style="padding:10px; width:80%; margin-bottom:16px; border-radius:6px; border:1px solid #ccc;">
+            <button id="popupCodeSubmit" class="btn btn-send">Valider</button>
+          </div>
+        </div>
+    </div>
+    <script>
+        // Dropdowns for sidebar
+        document.addEventListener('DOMContentLoaded', function() {
+            // Accès Personnel Dropdown
+            var accesToggle = document.getElementById('accesPersonnelToggle');
+            var accesMenu = document.getElementById('accesPersonnelMenu');
+            if (accesToggle && accesMenu) {
+                accesToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    accesMenu.style.display = (accesMenu.style.display === 'block') ? 'none' : 'block';
+                });
+                document.addEventListener('click', function(e) {
+                    if (!accesToggle.contains(e.target) && !accesMenu.contains(e.target)) {
+                        accesMenu.style.display = 'none';
+                    }
+                });
+            }
+            // Accès Materiel Dropdown
+            var materielToggle = document.getElementById('accesMaterielToggle');
+            var materielMenu = document.getElementById('accesMaterielMenu');
+            if (materielToggle && materielMenu) {
+                materielToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    materielMenu.style.display = (materielMenu.style.display === 'block') ? 'none' : 'block';
+                });
+                document.addEventListener('click', function(e) {
+                    if (!materielToggle.contains(e.target) && !materielMenu.contains(e.target)) {
+                        materielMenu.style.display = 'none';
+                    }
+                });
+            }
+            // Suivi Projets Dropdown
+            var projetToggle = document.getElementById('suiviProjetsToggle');
+            var projetMenu = document.getElementById('suiviProjetsMenu');
+            if (projetToggle && projetMenu) {
+                projetToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    projetMenu.style.display = (projetMenu.style.display === 'block') ? 'none' : 'block';
+                });
+                document.addEventListener('click', function(e) {
+                    if (!projetToggle.contains(e.target) && !projetMenu.contains(e.target)) {
+                        projetMenu.style.display = 'none';
+                    }
+                });
+            }
+        });
+        // Show/hide vehicle info
+        const voitureOui = document.getElementById('voitureOui');
+        const voitureNon = document.getElementById('voitureNon');
+        const vehicleInfo = document.getElementById('vehicleInfo');
+        function toggleVehicleInfo() {
+            vehicleInfo.style.display = voitureOui.checked ? 'block' : 'none';
+        }
+        voitureOui.addEventListener('change', toggleVehicleInfo);
+        voitureNon.addEventListener('change', toggleVehicleInfo);
+        toggleVehicleInfo();
+        // Update file name display
+        function updateFileName() {
+            var input = document.getElementById('photo');
+            var fileName = input.files.length > 0 ? input.files[0].name : '';
+            var link = document.getElementById('uploadedFileName');
+            if (fileName) {
+                link.textContent = fileName;
+                link.style.display = 'inline';
+            } else {
+                link.textContent = '';
+                link.style.display = 'none';
+            }
+        }
+        // Show popup
+        function showPopup(isExtension) {
+            var popup = document.getElementById('popupOverlay');
+            var popupMsg = popup.querySelector('h2');
+            if (isExtension) {
+                popupMsg.textContent = 'Projet modifié avec succès';
+            } else {
+                popupMsg.textContent = 'Votre projet est ajouté avec succès';
+            }
+            popup.style.display = 'flex';
+            // Hide on click anywhere or after 5 seconds
+            function hidePopup() {
+                popup.style.display = 'none';
+                document.removeEventListener('mousedown', hidePopup);
+            }
+            setTimeout(hidePopup, 5000);
+            setTimeout(function() {
+                document.removeEventListener('mousedown', hidePopup);
+            }, 5000);
+            setTimeout(function() {
+                document.addEventListener('mousedown', hidePopup);
+            }, 10);
+        }
+        // Show/hide apport details
+        const apportOui = document.getElementById('apportOui');
+        const apportNon = document.getElementById('apportNon');
+        const apportDetails = document.getElementById('apportDetails');
+        function toggleApportDetails() {
+            apportDetails.style.display = apportOui.checked ? 'block' : 'none';
+        }
+        apportOui.addEventListener('change', toggleApportDetails);
+        apportNon.addEventListener('change', toggleApportDetails);
+        toggleApportDetails();
+        // --- Project form toggling logic ---
+        document.addEventListener('DOMContentLoaded', function() {
+    const nouvelRadio = document.getElementById('nouvelProjet');
+    const extensionRadio = document.getElementById('extensionProjet');
+    const nouvelFields = document.getElementById('nouvelProjetFields');
+    const extensionDisplayFields = document.getElementById('extensionDisplayFields');
+    const submitBtn = document.getElementById('mainSubmitBtn');
+    submitBtn.onclick = function(e) {
+        e.preventDefault();
+        if (extensionRadio.checked && extensionDisplayFields.style.display === 'block') {
+            setTimeout(function() { showPopup(true); }, 100); // Force popup after DOM update
+        } else if (nouvelRadio.checked && nouvelFields.style.display === 'block') {
+            setTimeout(function() { showPopup(false); }, 100);
+        }
+    };
+    const extensionPopup = document.getElementById('extensionPopup');
+    const popupCodeProjet = document.getElementById('popupCodeProjet');
+    const popupCodeSubmit = document.getElementById('popupCodeSubmit');
+    // Main form fields for extension
+    const codeProjet = document.getElementById('codeProjet');
+    const entituleProjet = document.getElementById('entituleProjet');
+    const secteur = document.getElementById('secteur');
+    const dateDebutProjet = document.getElementById('dateDebutProjet');
+    const dateFinProjet = document.getElementById('dateFinProjet');
+    // Extension display fields
+    const codeProjetExtDisplay = document.getElementById('codeProjetExtDisplay');
+    const entituleProjetExtDisplay = document.getElementById('entituleProjetExtDisplay');
+    const secteurExtDisplay = document.getElementById('secteurExtDisplay');
+    const dateDebutProjetExtDisplay = document.getElementById('dateDebutProjetExtDisplay');
+    const dateFinProjetExtDisplay = document.getElementById('dateFinProjetExtDisplay');
+
+    function setReadonlyExtensionMode() {
+        codeProjet.readOnly = true;
+        entituleProjet.readOnly = true;
+        secteur.disabled = true;
+        dateDebutProjet.readOnly = true;
+        dateFinProjet.readOnly = false;
+    }
+    function setNouvelMode() {
+        codeProjet.readOnly = false;
+        entituleProjet.readOnly = false;
+        secteur.disabled = false;
+        dateDebutProjet.readOnly = false;
+        dateFinProjet.readOnly = false;
+        codeProjet.value = '';
+        entituleProjet.value = '';
+        secteur.value = '';
+        dateDebutProjet.value = '';
+        dateFinProjet.value = '';
+    }
+    function showExtensionPopup() {
+        extensionPopup.style.display = 'flex';
+        nouvelFields.style.display = 'none';
+        popupCodeProjet.value = '';
+    }
+    function hideExtensionPopup() {
+        extensionPopup.style.display = 'none';
+    }
+    function showExtensionFormWithData() {
+        nouvelFields.style.display = 'block';
+        setReadonlyExtensionMode();
+    }
+    function hideMainFormFields() {
+        nouvelFields.style.display = 'none';
+    }
+    function showExtensionDisplayFieldsWithData(code, entitule, secteur, dateDebut, dateFin) {
+        extensionDisplayFields.style.display = 'block';
+        codeProjetExtDisplay.value = code;
+        entituleProjetExtDisplay.value = entitule;
+        secteurExtDisplay.value = secteur;
+        dateDebutProjetExtDisplay.value = dateDebut;
+        dateFinProjetExtDisplay.value = dateFin;
+    }
+    function hideExtensionDisplayFields() {
+        extensionDisplayFields.style.display = 'none';
+    }
+    nouvelRadio.addEventListener('change', function() {
+        hideExtensionPopup();
+        nouvelFields.style.display = 'block';
+        hideExtensionDisplayFields();
+        setNouvelMode();
+    });
+    extensionRadio.addEventListener('change', function() {
+        showExtensionPopup();
+        nouvelFields.style.display = 'none';
+        hideExtensionDisplayFields();
+    });
+    popupCodeSubmit.addEventListener('click', function() {
+        if (popupCodeProjet.value.trim() !== '') {
+            // Example: fill with dummy data
+            hideExtensionPopup();
+            nouvelFields.style.display = 'none';
+            showExtensionDisplayFieldsWithData(
+                popupCodeProjet.value,
+                'Laayoune Port',
+                'Building',
+                '2025-01-01',
+                '2025-12-31'
+            );
+        } else {
+            popupCodeProjet.style.border = '1px solid red';
+        }
+    });
+    // On load, default to Nouvel Projet
+    nouvelFields.style.display = 'block';
+    hideExtensionDisplayFields();
+    hideExtensionPopup();
+});
+        // Zone/Site dynamic logic
+        const zoneSites = {
+    'el_jadida': ['El Jorf'],
+    'casa': ['Ain Sebaa', 'Zenata'],
+    'safi': ['Safi Port'],
+    'benguerir': ['Benguerir Site'],
+    'laayoune': ['Phosboucraa', 'Boucraa']
+};
+const zoneSelect = document.getElementById('zone');
+const siteSelect = document.getElementById('site');
+if(zoneSelect && siteSelect) {
+    siteSelect.style.display = 'none';
+    zoneSelect.addEventListener('change', function() {
+        const selectedZone = this.value;
+        siteSelect.innerHTML = '<option value="">Sélectionner</option>';
+        if(zoneSites[selectedZone]) {
+            siteSelect.style.display = 'block';
+            zoneSites[selectedZone].forEach(function(site) {
+                const opt = document.createElement('option');
+                opt.value = site.toLowerCase().replace(/\s+/g, '_');
+                opt.textContent = site;
+                siteSelect.appendChild(opt);
+            });
+        } else {
+            siteSelect.style.display = 'none';
+        }
+    });
+}
+    </script>
+    <script src="popup-handler.js"></script>
+    <script src="extension-popup.js"></script>
+</body>
+</html>

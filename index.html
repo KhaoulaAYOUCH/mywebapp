@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des autorisations d'accés au sites JESA</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Open Sans', sans-serif;
+            background: #f8f9fe;
+        }
+        .sidebar {
+            width: 270px;
+            background: #fff;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            box-shadow: 2px 0 10px rgba(44,62,80,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .sidebar .logo {
+            font-weight: bold;
+            font-size: 18px;
+            padding: 32px 0 24px 32px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #00338e;
+        }
+        .sidebar nav {
+            flex: 1;
+        }
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar nav ul li {
+            margin-bottom: 8px;
+        }
+        .sidebar nav ul li a {
+            display: flex;
+            align-items: center;
+            padding: 12px 32px;
+            color: #003ca5fd;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .sidebar nav ul li a.active, .sidebar nav ul li a:hover {
+            background: #f6f9fc;
+        }
+        .sidebar nav ul li a i {
+            margin-right: 16px;
+            font-size: 18px;
+        }
+        .sidebar .help {
+            text-align: center;
+            padding: 24px 16px 0 16px;
+        }
+        .sidebar .help img {
+            width: 60px;
+            margin-bottom: 8px;
+        }
+        .sidebar .help p {
+            margin: 0 0 8px 0;
+            color: #8898aa;
+            font-size: 14px;
+        }
+        .sidebar .help button, .sidebar .help .upgrade {
+            width: 100%;
+            padding: 10px 0;
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .sidebar .help button {
+            background: #172b4d;
+            color: #fff;
+        }
+        .sidebar .help .upgrade {
+            background: #5e72e4;
+            color: #fff;
+        }
+        .main-content {
+            margin-left: 270px;
+            padding: 0;
+            min-height: 100vh;
+        }
+        .navbar {
+            background: linear-gradient(87deg, #00338e 0, #ffffff 100%);
+            color: #fff;
+            padding: 24px 40px 32px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .navbar .breadcrumbs {
+            font-size: 15px;
+            color: #c7d3fa;
+        }
+        .navbar .breadcrumbs span {
+            color: #fff;
+            font-weight: 700;
+        }
+        .navbar .Logindata {
+            display: flex;
+            align-items: center;
+            gap: 100px;
+        }
+        .navbar .Logindata a{
+            color: #00338e;
+            font-weight: 1000;
+            text-decoration: none;
+            font-size: 15px;
+            text-align: center;
+        }
+        .navbar input[type="text"] {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            font-size: 15px;
+            outline: none;
+        }
+        .navbar .signin {
+            color: #fff;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 15px;
+        }
+        .dashboard-cards {
+            display: flex;
+            gap: 24px;
+            margin: -10px 30px 22px 30px;
+            position: relative;
+            z-index: 2;
+        }
+        .dashboard-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(44,62,80,0.05);
+            padding: 24px 32px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .dashboard-card .icon {
+            align-self: flex-end;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+        .dashboard-card .title {
+            font-size: 13px;
+            color: #8898aa;
+            font-weight: 700;
+        }
+        .dashboard-card .value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #32325d;
+        }
+        .dashboard-card .change {
+            font-size: 15px;
+            font-weight: 700;
+        }
+        .dashboard-card .change.positive {
+            color: #2dce89;
+        }
+        .dashboard-card .change.negative {
+            color: #f5365c;
+        }
+        .dashboard-card .desc {
+            font-size: 13px;
+            color: #8898aa;
+        }
+        .dashboard-main {
+            display: flex;
+            gap: 24px;
+            margin: 0 40px 0 40px;
+        }
+        .dashboard-main .sales-overview, .dashboard-main .argon-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(44,62,80,0.05);
+            padding: 32px 32px 24px 32px;
+            flex: 1;
+        }
+        .dashboard-main .sales-overview {
+            flex: 2;
+        }
+        .dashboard-main .argon-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .dashboard-main .argon-card img {
+            width: 90%;
+            max-width: 220px;
+            margin-bottom: 16px;
+        }
+        .dashboard-main .argon-card .title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #32325d;
+            margin-bottom: 8px;
+        }
+        .dashboard-main .argon-card .desc {
+            color: #8898aa;
+            font-size: 15px;
+        }
+        .sales-overview-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #32325d;
+            margin-bottom: 8px;
+        }
+        .sales-overview-sub {
+            color: #2dce89;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        .sales-chart {
+            width: 90%;
+            height: 220px;
+            border-radius: 8px;
+            display: flex;
+            align-items: flex-end;
+            padding: 0 16px 16px 16px;
+        }
+        .sales-chart svg {
+            width: 100%;
+            height: 100%;
+        }
+        @media (max-width: 1100px) {
+            .dashboard-cards, .dashboard-main {
+                flex-direction: column;
+            }
+            .dashboard-cards {
+                margin: -48px 16px 32px 16px;
+            }
+            .dashboard-main {
+                margin: 0 16px 0 16px;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <div>
+            <div class="logo"><img src="LOGOJESA.jpg" width="100" height="50"> Gestionnaire des accés</div>
+            <nav>
+                <ul>
+                    <li><a href="index.html" class="active"><i class="fa fa-tv"></i> Dashboard</a></li>
+                    <li style="position:relative;">
+                        <a href="#" id="accesPersonnelToggle" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+                            <span><i class="fa fa-address-book"></i>Accés Personnel</span>
+                            <i class="fa fa-caret-down" style="margin-left:8px;"></i>
+                        </a>
+                        <ul id="accesPersonnelMenu" style="display:none; position:absolute; left:0; top:40px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-radius:8px; list-style:none; margin:0; padding:8px 0; min-width:210px; z-index:2000;">
+                            <li id="ajouterDemandePersonnel" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'" onclick="window.location.href='acces-form.html'">
+                                <i class="fa fa-plus"></i> Ajouter une demande d'acces
+                            </li>
+                            <li id="suiviDemandesPersonnel" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'" onclick="window.location.href='table-demandes.html'">
+                                <i class="fa fa-clock"></i> Suivi des demandes d'acces
+                            </li>
+                        </ul>
+                    </li>
+                    <li style="position:relative;">
+                        <a href="#" id="accesMaterielToggle" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+                            <span><i class="fa fa-truck-field"></i>Accés Materiel</span>
+                            <i class="fa fa-caret-down" style="margin-left:8px;"></i>
+                        </a>
+                        <ul id="accesMaterielMenu" style="display:none; position:absolute; left:0; top:40px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-radius:8px; list-style:none; margin:0; padding:8px 0; min-width:210px; z-index:2000;">
+                            <li style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'" onclick="window.location.href='bon-entree-sortie.html'">
+                                <i class="fa fa-plus"></i> Générer un bon d'entrée-sortie
+                            </li>
+                            <li style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'" onclick="window.location.href='suivi-entree-sortie.html'">
+                                <i class="fa fa-clock"></i> Suivi des entrée-sortie
+                            </li>
+                        </ul>
+                    </li>
+                    <li style="position:relative;">
+                        <a href="#" id="suiviProjetsToggle" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+                            <span><i class="fa fa-industry"></i>Suivi des projets</span>
+                            <i class="fa fa-caret-down" style="margin-left:8px;"></i>
+                        </a>
+                        <ul id="suiviProjetsMenu" style="display:none; position:absolute; left:0; top:40px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-radius:8px; list-style:none; margin:0; padding:8px 0; min-width:210px; z-index:2000;">
+                            <li id="ajouterProjet" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'" onclick="window.location.href='Project-form.html'">
+                                <i class="fa fa-plus"></i> Ajouter un projet
+                            </li>
+                            <li id="mesProjets" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'" onclick="window.location.href='mes-projets.html'">
+                                <i class="fa fa-folder-open"></i> Mes projets
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <button id="logoutSidebarBtn" title="Déconnexion" style="position: absolute; left: 18px; bottom: 24px; background:transparent; color:#f5365c; border:none; border-radius:50%; padding:8px; font-size:20px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center;" onclick="window.location.href='logout.html'"><i class="fa-solid fa-right-from-bracket"></i></button>
+    </div>
+    <div class="main-content">
+        <div class="navbar">Dashboard
+            <div class="Logindata" style="position: relative; display: flex; align-items: center; gap: 18px;">
+                <span id="userProfileArea" style="display: flex; align-items: center; gap: 8px; cursor:pointer; font-weight: 700; color: #00338e; font-size: 15px;">
+                    <i class="fa-solid fa-circle-user"></i>
+                    AYOUCH Khaoula
+                </span>
+                <span id="notificationBellArea" style="display: flex; align-items: center; gap: 4px; cursor:pointer; position:relative;">
+                    <i class="fa fa-bell" style="color:#f5365c; font-size:18px;"></i>
+                    <span id="notificationCount" style="background: #f5365c; color: #fff; border-radius: 50%; padding: 2px 7px; font-size: 12px; display: inline-block;">3</span>
+                    <div id="notificationDropdown" style="display:none; position:absolute; right:0; top:28px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-radius:8px; min-width:320px; z-index:2000; padding:0;">
+                        <div style="padding:12px 18px; border-bottom:1px solid #eee; font-weight:700; color:#00338e;">Notifications</div>
+                        <ul style="list-style:none; margin:0; padding:0;">
+                            <li style="padding:12px 18px; border-bottom:1px solid #f6f9fc; color:#32325d; display:flex; align-items:center;"><i class="fa fa-user-plus" style="color:#2dce89; margin-right:10px;"></i>Nouvelle demande d'accès soumise</li>
+                            <li style="padding:12px 18px; border-bottom:1px solid #f6f9fc; color:#32325d; display:flex; align-items:center;"><i class="fa fa-check-circle" style="color:#5e72e4; margin-right:10px;"></i>Demande approuvée</li>
+                            <li style="padding:12px 18px; color:#32325d; display:flex; align-items:center;"><i class="fa fa-times-circle" style="color:#f5365c; margin-right:10px;"></i>Demande rejetée</li>
+                        </ul>
+                    </div>
+                </span>
+            </div>
+        </div>
+        <div class="dashboard-cards">
+            <div class="dashboard-card">
+                <div class="icon" style="color:#5e72e4;"><i class="fa fa-list"></i></div>
+                <div class="title">Totale des autorisations</div>
+                <div class="value">254</div>
+            </div>
+            <div class="dashboard-card">
+                <div class="icon" style="color:#fb6340;"><i class="fa fa-user-clock"></i></div>
+                <div class="title">Approbations en attente</div>
+                <div class="value">15</div>
+            </div>
+            <div class="dashboard-card">
+                <div class="icon" style="color:#2dce89;"><i class="fa fa-user-check"></i></div>
+                <div class="title">Demandes approvée</div>
+                <div class="value">198</div>
+            </div>            
+            <div class="dashboard-card">
+                <div class="icon" style="color:#f5365c;"><i class="fa fa-user-xmark"></i></div>
+                <div class="title">Demandes rejetée</div>
+                <div class="value">41</div>
+            </div>
+        </div>
+        <div class="dashboard-main">
+            <div class="sales-overview">
+                <div class="sales-overview-title">Aperçu du site</div>
+                <div class="sales-chart">
+                    <canvas style="width: 200px; height: 180px;" id="miniGraph" width="400" height="200"></canvas>
+                </div>
+            </div>
+            <div class="argon-card">
+                <canvas id="accessSummaryChart" style="max-width: 300px;"></canvas>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Chart.js code for miniGraph
+        const ctx = document.getElementById('miniGraph').getContext('2d');
+        const miniGraph = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Avril', 'Mai', 'Juin'],
+                datasets: [
+                    {
+                        label: 'Acceptés',
+                        data: [35, 42, 50],
+                        backgroundColor: 'rgb(48,204,140)'
+                    },
+                    {
+                        label: 'Rejetés',
+                        data: [10, 6, 12],
+                        backgroundColor: 'rgb(248,52,92)'
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        // Chart.js code for accessSummaryChart
+        const ctxAccess = document.getElementById('accessSummaryChart').getContext('2d');
+        const accessSummaryChart = new Chart(ctxAccess, {
+            type: 'doughnut',
+            data: {
+                labels: ['Ouvriers', 'Visiteurs', 'Matériaux', 'Engins'],
+                datasets: [{
+                    label: 'Nombre des accès',
+                    data: [120, 45, 30, 25],
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.8)',
+                        'rgba(255, 206, 86, 0.8)',
+                        'rgba(75, 192, 192, 0.8)',
+                        'rgba(255, 99, 132, 0.8)'
+                    ],
+                    borderColor: 'white',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                }
+            }
+        });
+    </script>
+    <script>
+    // Sidebar dropdown logic
+    document.addEventListener('DOMContentLoaded', function() {
+        function toggleMenu(toggleId, menuId) {
+            const toggle = document.getElementById(toggleId);
+            const menu = document.getElementById(menuId);
+            if (toggle && menu) {
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+                });
+            }
+        }
+        toggleMenu('accesPersonnelToggle', 'accesPersonnelMenu');
+        toggleMenu('accesMaterielToggle', 'accesMaterielMenu');
+        toggleMenu('suiviProjetsToggle', 'suiviProjetsMenu');
+    });
+    </script>
+</body>
+</html>

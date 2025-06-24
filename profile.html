@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mon Profil - JESA</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      background: linear-gradient(87deg, #00338e 0, #54a8c9 100%);
+      font-family: 'Open Sans', sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      color: #00338e;
+    }
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 40px 40px 16px 40px;
+      background: #fff;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .profile-header img {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #28a745;
+    }
+    .profile-header-main {
+      flex: 1;
+    }
+    .profile-header-main h1 {
+      margin: 0 0 6px 0;
+      font-size: 28px;
+      font-weight: 700;
+      color: #00338e;
+    }
+    .profile-header-main .subtitle {
+      color: #54a8c9;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+    .profile-header-main .status {
+      display: inline-flex;
+      align-items: center;
+      background: #e6f9f0;
+      color: #28a745;
+      font-weight: 700;
+      border-radius: 20px;
+      padding: 4px 14px 4px 10px;
+      font-size: 15px;
+      border: 1.5px solid #28a745;
+      margin-top: 6px;
+      margin-bottom: 8px;
+    }
+    .profile-header-main .status i {
+      margin-right: 6px;
+    }
+    .profile-section {
+      padding: 32px 40px 0 40px;
+      background: #f6f9fc;
+      min-height: 100vh;
+    }
+    .profile-card {
+      background: #fff;
+      border-radius: 10px;
+      border: 1.5px solid #e0e0e0;
+      padding: 24px 32px 18px 32px;
+      margin-bottom: 32px;
+      color: #00338e;
+    }
+    .profile-card .section-title {
+      color: #00338e;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+    .profile-contact {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px 48px;
+      margin-bottom: 10px;
+    }
+    .profile-contact-item {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 8px;
+      color: #00338e;
+      font-size: 15px;
+    }
+    .profile-contact-item i {
+      color: #54a8c9;
+      font-size: 18px;
+      min-width: 22px;
+    }
+    @media (max-width: 700px) {
+      .profile-header, .profile-section { padding-left: 8vw; padding-right: 8vw; }
+      .profile-card { padding: 18px 8vw; }
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-header">
+    <img src="LOGOJESA.jpg" alt="Photo de profil">
+    <div class="profile-header-main">
+      <h1>Khaoula Ayouch</h1>
+      <div class="subtitle">Field Services Coordinator • Constructability</div>
+      <div class="status" id="statusBox" style="cursor:pointer; user-select:none;" onclick="toggleStatus()"><i class="fa fa-check-circle"></i> <span id="statusText">Active</span></div>
+    </div>
+    <button id="logoutBtn" title="Déconnexion" style="margin-left:auto; background:transparent; color:#f5365c; border:none; border-radius:50%; padding:8px; font-size:20px; font-weight:700; cursor:pointer; display:flex; align-items:center;"><i class="fa-solid fa-right-from-bracket"></i></button>
+  </div>
+  <div class="profile-section">
+    <div class="profile-card">
+      <div class="section-title"><i class="fa fa-info-circle" style="color:#54a8c9;"></i> Informations de contact</div>
+      <div class="profile-contact" style="display:grid; grid-template-columns: 1fr 1fr; gap: 18px 48px; margin-bottom: 10px;">
+        <div class="profile-contact-item">
+          <span style="font-weight:600; color:#00338e;"><i class="fa fa-user" style="color:#54a8c9; margin-right:6px;"></i>Nom :</span>
+          <span style="color:#00338e;">Khaoula Ayouch</span>
+        </div>
+        <div class="profile-contact-item">
+          <span style="font-weight:600; color:#00338e;"><i class="fa fa-briefcase" style="color:#54a8c9; margin-right:6px;"></i>Poste :</span>
+          <span style="color:#00338e;">Field Services Coordinator</span>
+        </div>
+        <div class="profile-contact-item">
+          <span style="font-weight:600; color:#00338e;"><i class="fa fa-envelope" style="color:#54a8c9; margin-right:6px;"></i>Email :</span>
+          <span style="color:#54a8c9;">Khaoula.Ayouch@jesagroup.com</span>
+        </div>
+        <div class="profile-contact-item">
+          <span style="font-weight:600; color:#00338e;"><i class="fa fa-phone" style="color:#54a8c9; margin-right:6px;"></i>Téléphone :</span>
+          <span style="color:#00338e;">06 60 49 76 72</span>
+        </div>
+        <div class="profile-contact-item">
+          <span style="font-weight:600; color:#00338e;"><i class="fa fa-location-dot" style="color:#54a8c9; margin-right:6px;"></i>Localisation :</span>
+          <span style="color:#00338e;">Site Laayoune</span>
+        </div>
+        <div class="profile-contact-item">
+          <span style="font-weight:600; color:#00338e;"><i class="fa fa-building" style="color:#54a8c9; margin-right:6px;"></i>Entreprise :</span>
+          <span style="color:#00338e;">JESA</span>
+        </div>
+      </div>
+    </div>
+    <div class="profile-card">
+      <div class="section-title"><i class="fa fa-user-shield" style="color:#54a8c9;"></i> Backup</div>
+      <div class="profile-contact" style="display:grid; grid-template-columns: 1fr 1fr; gap: 18px 48px; margin-bottom: 10px;">
+        <div class="profile-contact-item">
+          <span style="font-weight:600; color:#00338e;"><i class="fa fa-user" style="color:#54a8c9; margin-right:6px;"></i>Nom :</span>
+          <span style="color:#00338e;">Mariam Merzouki</span>
+        </div>
+        <div class="profile-contact-item">
+          <span style="font-weight:600; color:#00338e;"><i class="fa fa-briefcase" style="color:#54a8c9; margin-right:6px;"></i>Poste :</span>
+          <span style="color:#00338e;">Senior Field Services Coordinator</span>
+        </div>
+        <div class="profile-contact-item">
+          <span style="font-weight:600; color:#00338e;"><i class="fa fa-envelope" style="color:#54a8c9; margin-right:6px;"></i>Email :</span>
+          <span style="color:#54a8c9;">mariam.merzouki@jesagroup.com</span>
+        </div>
+      </div>
+      <button style="background:#54a8c9; color:#fff; border:none; border-radius:7px; padding:8px 24px; font-size:15px; font-weight:600; margin-top:12px; cursor:pointer;" onclick="openBackupPopup()">Changer le backup</button>
+    </div>
+    <!-- Backup Popup -->
+    <div id="backupPopupOverlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.3); align-items:center; justify-content:center; z-index:3000;">
+      <div style="background:#fff; color:#00338e; padding:32px 40px; border-radius:12px; box-shadow:0 2px 12px rgba(0,51,142,0.12); text-align:center; max-width:350px; margin:auto;">
+        <h2 style="color:#00338e; margin-bottom:18px;">Changer le backup</h2>
+        <form id="backupForm" autocomplete="off">
+          <input type="text" id="backupName" placeholder="Nom du backup" style="padding:10px; width:90%; margin-bottom:12px; border-radius:6px; border:1.5px solid #54a8c9; background:#f6f9fc; color:#00338e;"><br>
+          <input type="text" id="backupPoste" placeholder="Poste" style="padding:10px; width:90%; margin-bottom:12px; border-radius:6px; border:1.5px solid #54a8c9; background:#f6f9fc; color:#00338e;"><br>
+          <input type="email" id="backupEmail" placeholder="Email" style="padding:10px; width:90%; margin-bottom:18px; border-radius:6px; border:1.5px solid #54a8c9; background:#f6f9fc; color:#00338e;"><br>
+          <button type="submit" style="background:#54a8c9; color:#fff; border:none; border-radius:7px; padding:8px 24px; font-size:15px; font-weight:600; cursor:pointer;">Enregistrer</button>
+          <button type="button" onclick="closeBackupPopup()" style="background:#e0e0e0; color:#00338e; border:none; border-radius:7px; padding:8px 24px; font-size:15px; font-weight:600; margin-left:10px; cursor:pointer;">Annuler</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    function toggleStatus() {
+      var statusBox = document.getElementById('statusBox');
+      var statusText = document.getElementById('statusText');
+      if (statusText.textContent === 'Active') {
+        statusText.textContent = 'Unactive';
+        statusBox.style.color = '#f5365c';
+        statusBox.style.borderColor = '#f5365c';
+        statusBox.querySelector('i').className = 'fa fa-times-circle';
+        statusBox.style.background = '#fbeaea';
+      } else {
+        statusText.textContent = 'Active';
+        statusBox.style.color = '#28a745';
+        statusBox.style.borderColor = '#28a745';
+        statusBox.querySelector('i').className = 'fa fa-check-circle';
+        statusBox.style.background = '#e6f9f0';
+      }
+    }
+    function openBackupPopup() {
+      document.getElementById('backupPopupOverlay').style.display = 'flex';
+      document.getElementById('backupName').value = '';
+      document.getElementById('backupPoste').value = '';
+      document.getElementById('backupEmail').value = '';
+    }
+    function closeBackupPopup() {
+      document.getElementById('backupPopupOverlay').style.display = 'none';
+    }
+    document.getElementById('backupForm').onsubmit = function(e) {
+      e.preventDefault();
+      var name = document.getElementById('backupName').value.trim();
+      var poste = document.getElementById('backupPoste').value.trim();
+      var email = document.getElementById('backupEmail').value.trim();
+      if (!name || !poste || !email) {
+        alert('Veuillez remplir tous les champs.');
+        return;
+      }
+      // Update backup info on the profile
+      var backupItems = document.querySelectorAll('.profile-card .profile-contact-item');
+      backupItems[0].querySelector('span').textContent = name;
+      backupItems[1].querySelector('span').textContent = poste;
+      backupItems[2].querySelector('span').textContent = email;
+      closeBackupPopup();
+    };
+    document.getElementById('logoutBtn').onclick = function() {
+      window.location.href = 'login.html';
+    };
+  </script>
+</body>
+</html>

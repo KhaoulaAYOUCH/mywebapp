@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau des Demandes d'Accès</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Open Sans', sans-serif;
+            background: #f8f9fe;
+        }
+        .sidebar {
+            width: 270px;
+            background: #fff;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            box-shadow: 2px 0 10px rgba(44,62,80,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .sidebar .logo {
+            font-weight: bold;
+            font-size: 18px;
+            padding: 32px 0 24px 32px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #00338e;
+        }
+        .sidebar nav {
+            flex: 1;
+        }
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar nav ul li {
+            margin-bottom: 8px;
+        }
+        .sidebar nav ul li a {
+            display: flex;
+            align-items: center;
+            padding: 12px 32px;
+            color: #003ca5fd;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .sidebar nav ul li a.active, .sidebar nav ul li a:hover {
+            background: #f6f9fc;
+        }
+        .sidebar nav ul li a i {
+            margin-right: 16px;
+            font-size: 18px;
+        }
+        .main-content {
+            margin-left: 270px;
+            padding: 0;
+            min-height: 100vh;
+        }
+        .navbar {
+            background: linear-gradient(87deg, #00338e 0, #ffffff 100%);
+            color: #fff;
+            padding: 24px 40px 32px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .navbar .Logindata {
+            display: flex;
+            align-items: center;
+            gap: 100px;
+        }
+        .navbar .Logindata a{
+            color: #00338e;
+            font-weight: 1000;
+            text-decoration: none;
+            font-size: 15px;
+            text-align: center;
+        }
+        .table-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(44,62,80,0.08);
+            padding: 0 0 24px 0;
+        }
+        .table-header {
+            background: linear-gradient(87deg, #5e72e4 0, #825ee4 100%);
+            border-radius: 18px 18px 0 0;
+            padding: 24px 32px 18px 32px;
+        }
+        .table-header h2 {
+            color: #222;
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+        }
+        thead th {
+            color: #b0b7c3;
+            font-size: 13px;
+            font-weight: 700;
+            text-align: left;
+            padding: 18px 32px 10px 32px;
+            background: transparent;
+            border-bottom: 1px solid #e9ecef;
+        }
+        tbody td {
+            padding: 18px 20px;
+            border-bottom: 1px solid #f0f1f6;
+            vertical-align: middle;
+            font-size: 15px;
+        }
+        .status {
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .status-online {
+            background: #2dce89;
+            color: #fff;
+        }
+        .status-offline {
+            background: #f70303;
+            color: #fff;
+        }
+        .status-offlineWaiting {
+            background: #ffe600;
+            color: #fff;
+        }
+        .edit-link {
+            color: #000000;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .edit-link:hover {
+            text-decoration: underline;
+            color: #5e72e4;
+
+        }
+        .edit-link i{
+            font-size: 20px;
+            margin-left: 35%;
+        }
+        /* Modal styles */
+#requestModal .modal-content {
+  background: #fff;
+  padding: 32px 40px;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(44,62,80,0.15);
+  max-width: 900px;
+  width: 95vw;
+  margin: auto;
+  position: relative;
+}
+#requestModal h2 {
+  color: #00338e;
+  margin-bottom: 24px;
+  text-align: center;
+}
+#requestModal label {
+  color: #00338e;
+  font-weight: 600;
+}
+#requestModal input, #requestModal select, #requestModal textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  font-size: 15px;
+  background: #f6f9fc;
+  margin-bottom: 12px;
+}
+#requestModal .form-section {
+  background: #f8f9fe;
+  border-radius: 12px;
+  padding: 18px 18px 8px 18px;
+  margin-bottom: 18px;
+}
+#requestModal .form-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #00338e;
+  margin-bottom: 12px;
+}
+#requestModal .form-row {
+  display: flex;
+  gap: 18px;
+  margin-bottom: 12px;
+}
+#requestModal .form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+#requestModal .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 18px;
+}
+#requestModal .btn-cancel {
+  background: #e0e0e0;
+  color: #333;
+  border: none;
+  border-radius: 7px;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 10px 32px;
+  cursor: pointer;
+}
+#requestModal .close-x {
+  position: absolute;
+  top: 18px;
+  right: 24px;
+  font-size: 22px;
+  color: #00338e;
+  cursor: pointer;
+  font-weight: bold;
+}
+        @media (max-width: 900px) {
+            .table-container { padding: 0 0 12px 0; }
+            table, thead, tbody, th, td, tr { display: block; }
+            thead { display: none; }
+            tbody td { padding: 12px 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div>
+            <div class="logo"><img src="LOGOJESA.jpg" width="100" height="50"> Gestionnaire des accés</div>
+            <nav>
+                <ul>
+                    <li><a href="index.html"><i class="fa fa-tv"></i> Dashboard</a></li>
+                    <li style="position:relative;">
+    <a href="#" id="accesPersonnelToggle" class="active" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+        <span><i class="fa fa-address-book"></i>Accés Personnel</span>
+        <i class="fa fa-caret-down" style="margin-left:8px;"></i>
+    </a>
+    <ul id="accesPersonnelMenu" style="display:none; position:absolute; left:0; top:40px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-radius:8px; list-style:none; margin:0; padding:8px 0; min-width:210px; z-index:2000;">
+        <li id="ajouterDemandePersonnel" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'" onclick="window.location.href='acces-form.html'"><i class="fa fa-plus"></i> Ajouter une demande d'acces</li>
+        <li style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'"><i class="fa fa-clock"></i> Suivi des demandes d'acces</li>
+    </ul>
+    
+</li>
+                    <li style="position:relative;">
+    <a href="#" id="accesMaterielToggle" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+        <span><i class="fa fa-truck-field"></i>Accés Materiel</span>
+        <i class="fa fa-caret-down" style="margin-left:8px;"></i>
+    </a>
+    <ul id="accesMaterielMenu" style="display:none; position:absolute; left:0; top:40px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-radius:8px; list-style:none; margin:0; padding:8px 0; min-width:210px; z-index:2000;">
+        <li style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'"> <i class="fa fa-plus"></i> Générer un bon d'entrée-sortie</li>
+        <li style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'"> <i class="fa fa-clock"></i> Suivi des entrée-sortie</li>
+    </ul>
+</li>
+                    <li style="position:relative;">
+    <a href="#" id="suiviProjetsToggle" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+        <span><i class="fa fa-industry"></i>Suivi des projets</span>
+        <i class="fa fa-caret-down" style="margin-left:8px;"></i>
+    </a>
+    <ul id="suiviProjetsMenu" style="display:none; position:absolute; left:0; top:40px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-radius:8px; list-style:none; margin:0; padding:8px 0; min-width:210px; z-index:2000;">
+        <li id="ajouterProjet" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'" onclick="window.location.href='Project-form.html'"><i class="fa fa-plus"></i> Ajouter un projet</li>
+        <li id="mesProjets" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'"><i class="fa fa-folder-open"></i> Mes projets</li>
+    </ul>
+</li>
+                </ul>
+            </nav>
+        </div>
+        <button id="logoutSidebarBtn" title="Déconnexion" style="position: absolute; left: 18px; bottom: 24px; background:transparent; color:#f5365c; border:none; border-radius:50%; padding:8px; font-size:20px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center;"><i class="fa-solid fa-right-from-bracket"></i></button>
+    </div>
+    <div class="main-content">
+        <div class="navbar">Tableau des Demandes
+            <div class="Logindata" style="position: relative; display: flex; align-items: center; gap: 18px;">
+                <span id="userProfileArea" style="display: flex; align-items: center; gap: 8px; cursor:pointer; font-weight: 700; color: #00338e; font-size: 15px;">
+                    <i class="fa-solid fa-circle-user"></i>
+                    AYOUCH Khaoula
+                </span>
+                <span id="notificationBellArea" style="display: flex; align-items: center; gap: 4px; cursor:pointer; position:relative;">
+                    <i class="fa fa-bell" style="color:#f5365c; font-size:18px;"></i>
+                    <span id="notificationCount" style="background: #f5365c; color: #fff; border-radius: 50%; padding: 2px 7px; font-size: 12px; display: inline-block;">3</span>
+                    <div id="notificationDropdown" style="display:none; position:absolute; right:0; top:28px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-radius:8px; min-width:320px; z-index:2000; padding:0;">
+                        <div style="padding:12px 18px; border-bottom:1px solid #eee; font-weight:700; color:#00338e;">Notifications</div>
+                        <ul style="list-style:none; margin:0; padding:0;">
+                            <li style="padding:12px 18px; border-bottom:1px solid #f6f9fc; color:#32325d; display:flex; align-items:center;"><i class="fa fa-user-plus" style="color:#2dce89; margin-right:10px;"></i>Nouvelle demande d'accès soumise</li>
+                            <li style="padding:12px 18px; border-bottom:1px solid #f6f9fc; color:#32325d; display:flex; align-items:center;"><i class="fa fa-check-circle" style="color:#5e72e4; margin-right:10px;"></i>Demande approuvée</li>
+                            <li style="padding:12px 18px; color:#32325d; display:flex; align-items:center;"><i class="fa fa-times-circle" style="color:#f5365c; margin-right:10px;"></i>Demande rejetée</li>
+                        </ul>
+                    </div>
+                </span>
+            </div>
+        </div>
+        <div class="table-container">
+            <div class="table-header">
+                <h2>Tableau des Demandes d'Accès</h2>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Code de la demande</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>CIN / Passport</th>
+                        <th>Société</th>
+                        <th>Demandeur</th>
+                        <th>Statut de la demande</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>EL Amrani</td>
+                        <td>Samir</td>
+                        <td>Q508674</td>
+                        <td>JESA</td>
+                        <TD>Khaoula AYOUCH</TD>
+                        <td><span class="status status-online">Validé</span></td>
+                        <td><a class="edit-link" href="details-demande.html?id=0"><i class="fa-solid fa-eye"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>BEN ALI</td>
+                        <td>YASSINE</td>
+                        <td>B123456</td>
+                        <td>SEPROB</td>
+                        <TD>Youness Aniss</TD>
+                        <td><span class="status status-offlineWaiting">En attente</span></td>
+                        <td><a class="edit-link" href="details-demande.html?id=1"><i class="fa-solid fa-eye"></i></a></td>
+                    </tr>
+                    <tr>
+                        <TD>3</TD>
+                        <td>AMINE</td>
+                        <td>FATIMA</td>
+                        <td>C987654</td>
+                        <td>AGNV</td>
+                        <td>Ahmed Mohammed</td>
+                        <td><span class="status status-offline">Refusé</span></td>
+                        <td><a class="edit-link" href="details-demande.html?id=2"><i class="fa-solid fa-eye"></i></a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Modal for viewing request details -->
+<div id="requestModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); align-items:center; justify-content:center; z-index:2000;">
+  <div class="modal-content">
+    <span class="close-x" onclick="closeRequestModal()">&times;</span>
+    <h2>Détails de la demande</h2>
+    <form id="modalForm">
+      <div class="form-section">
+        <div class="form-title">Information Personnelle</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="modal_nom">Nom *</label>
+            <input type="text" id="modal_nom" name="nom" readonly>
+          </div>
+          <div class="form-group">
+            <label for="modal_prenom">Prénom *</label>
+            <input type="text" id="modal_prenom" name="prenom" readonly>
+          </div>
+          <div class="form-group">
+            <label for="modal_cin">Cin / Passport *</label>
+            <input type="text" id="modal_cin" name="cin" readonly>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="modal_societe">Société *</label>
+            <input type="text" id="modal_societe" name="societe" readonly>
+          </div>
+          <div class="form-group">
+            <label for="modal_statut">Statut *</label>
+            <input type="text" id="modal_statut" name="statut" readonly>
+          </div>
+          <div class="form-group">
+            <label for="modal_mission">Mission *</label>
+            <input type="text" id="modal_mission" name="mission" readonly>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="modal_projet">Projet *</label>
+            <input type="text" id="modal_projet" name="projet" readonly>
+          </div>
+          <div class="form-group">
+            <label for="modal_datedebut">Date de début *</label>
+            <input type="date" id="modal_datedebut" name="datedebut" readonly>
+          </div>
+          <div class="form-group">
+            <label for="modal_datefin">Date de fin *</label>
+            <input type="date" id="modal_datefin" name="datefin" readonly>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="modal_telephone">Téléphone *</label>
+            <input type="text" id="modal_telephone" name="telephone" readonly>
+          </div>
+          <div class="form-group">
+            <label for="modal_nationalite">Nationalité *</label>
+            <input type="text" id="modal_nationalite" name="nationalite" readonly>
+          </div>
+        </div>
+      </div>
+      <div class="form-section" id="vehicule-section">
+        <div class="form-title">Avez-vous une voiture ?</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="modal_marque">Marque</label>
+            <input type="text" id="modal_marque" name="marque" readonly>
+          </div>
+          <div class="form-group">
+            <label for="modal_modele">Modèle</label>
+            <input type="text" id="modal_modele" name="modele" readonly>
+          </div>
+          <div class="form-group">
+            <label for="modal_matricule">Matricule *</label>
+            <input type="text" id="modal_matricule" name="matricule" readonly>
+          </div>
+          <div class="form-group">
+            <label for="modal_couleur">Couleur</label>
+            <input type="text" id="modal_couleur" name="couleur" readonly>
+          </div>
+        </div>
+      </div>
+      <div class="form-section" id="apport-section">
+        <div class="form-title">Apportez-vous quelque chose ?</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="modal_apportType">Type d'objet</label>
+            <input type="text" id="modal_apportType" name="apportType" readonly>
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" onclick="closeRequestModal()">Fermer</button>
+      </div>
+    </form>
+  </div>
+</div>
+    <script>
+        // Dropdowns for sidebar
+        document.addEventListener('DOMContentLoaded', function() {
+            var toggle = document.getElementById('userMenuToggle');
+            var menu = document.getElementById('userMenu');
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+            });
+            document.addEventListener('click', function(e) {
+                if (!toggle.contains(e.target) && !menu.contains(e.target)) {
+                    menu.style.display = 'none';
+                }
+            });
+            var accesToggle = document.getElementById('accesPersonnelToggle');
+            var accesMenu = document.getElementById('accesPersonnelMenu');
+            accesToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                accesMenu.style.display = (accesMenu.style.display === 'block') ? 'none' : 'block';
+            });
+            document.addEventListener('click', function(e) {
+                if (!accesToggle.contains(e.target) && !accesMenu.contains(e.target)) {
+                    accesMenu.style.display = 'none';
+                }
+            });
+            var materielToggle = document.getElementById('accesMaterielToggle');
+            var materielMenu = document.getElementById('accesMaterielMenu');
+            materielToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                materielMenu.style.display = (materielMenu.style.display === 'block') ? 'none' : 'block';
+            });
+            document.addEventListener('click', function(e) {
+                if (!materielToggle.contains(e.target) && !materielMenu.contains(e.target)) {
+                    materielMenu.style.display = 'none';
+                }
+            });
+            var projetsToggle = document.getElementById('suiviProjetsToggle');
+            var projetsMenu = document.getElementById('suiviProjetsMenu');
+            projetsToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                projetsMenu.style.display = (projetsMenu.style.display === 'block') ? 'none' : 'block';
+            });
+            document.addEventListener('click', function(e) {
+                if (!projetsToggle.contains(e.target) && !projetsMenu.contains(e.target)) {
+                    projetsMenu.style.display = 'none';
+                }
+            });
+        });
+        function showRequestModal(index) {
+  const req = requests[index];
+  document.getElementById('modal_nom').value = req.nom;
+  document.getElementById('modal_prenom').value = req.prenom;
+  document.getElementById('modal_cin').value = req.cin;
+  document.getElementById('modal_societe').value = req.societe;
+  document.getElementById('modal_statut').value = req.statut;
+  document.getElementById('modal_mission').value = req.mission;
+  document.getElementById('modal_projet').value = req.projet;
+  document.getElementById('modal_datedebut').value = req.datedebut;
+  document.getElementById('modal_datefin').value = req.datefin;
+  document.getElementById('modal_telephone').value = req.telephone;
+  document.getElementById('modal_nationalite').value = req.nationalite;
+  // Vehicle section show/hide
+  if(req.voiture === 'oui') {
+    document.getElementById('vehicule-section').style.display = '';
+    document.getElementById('modal_marque').value = req.marque;
+    document.getElementById('modal_modele').value = req.modele;
+    document.getElementById('modal_matricule').value = req.matricule;
+    document.getElementById('modal_couleur').value = req.couleur;
+  } else {
+    document.getElementById('vehicule-section').style.display = 'none';
+  }
+  // Apport section show/hide
+  if(req.apport === 'oui') {
+    document.getElementById('apport-section').style.display = '';
+    document.getElementById('modal_apportType').value = req.apportType;
+  } else {
+    document.getElementById('apport-section').style.display = 'none';
+  }
+  document.getElementById('requestModal').style.display = 'flex';
+}
+function closeRequestModal() {
+  document.getElementById('requestModal').style.display = 'none';
+}
+// Attach to all eye icons with row index
+const eyes = document.querySelectorAll('.fa-eye');
+eyes.forEach((eye, idx) => {
+  eye.style.cursor = 'pointer';
+  eye.onclick = function() { showRequestModal(idx); };
+});
+// Example data for each row (simulate real data)
+const requests = [
+  {
+    nom: 'EL Amrani', prenom: 'Samir', cin: 'Q508674', societe: 'JESA', statut: 'Employé', mission: 'Supervision', projet: 'Laayoune Waship Plant', datedebut: '2025-06-01', datefin: '2025-06-10', telephone: '0600000000', nationalite: 'Marocain', voiture: 'oui', marque: 'Renault', modele: 'Clio', matricule: '1234-أ-56', couleur: 'Blanc', apport: 'oui', apportType: 'Valise'
+  },
+  {
+    nom: 'BEN ALI', prenom: 'YASSINE', cin: 'B123456', societe: 'SEPROB', statut: 'Consultant', mission: 'Audit', projet: 'PFC TSP', datedebut: '2025-06-05', datefin: '2025-06-15', telephone: '0611111111', nationalite: 'Marocain', voiture: 'non', marque: '', modele: '', matricule: '', couleur: '', apport: 'non', apportType: ''
+  },
+  {
+    nom: 'AMINE', prenom: 'FATIMA', cin: 'C987654', societe: 'AGNV', statut: 'Fournisseur', mission: 'Livraison', projet: 'PFC PAP', datedebut: '2025-06-10', datefin: '2025-06-20', telephone: '0622222222', nationalite: 'Etranger', voiture: 'oui', marque: 'Toyota', modele: 'Corolla', matricule: '5678-ب-90', couleur: 'Noir', apport: 'oui', apportType: 'EPI'
+  }
+];
+        // Sidebar logout
+        const logoutSidebarBtn = document.getElementById('logoutSidebarBtn');
+        if(logoutSidebarBtn) {
+            logoutSidebarBtn.addEventListener('click', function() {
+                window.location.href = 'login.html';
+            });
+        }
+        // Notification bell
+        const notificationBell = document.querySelector('#notificationBellArea');
+        const notificationDropdown = document.querySelector('#notificationDropdown');
+        if (notificationBell && notificationDropdown) {
+            notificationBell.addEventListener('click', (e) => {
+                e.stopPropagation();
+                notificationDropdown.style.display = notificationDropdown.style.display === 'block' ? 'none' : 'block';
+            });
+            document.addEventListener('click', (e) => {
+                if (!notificationBell.contains(e.target) && !notificationDropdown.contains(e.target)) {
+                    notificationDropdown.style.display = 'none';
+                }
+            });
+        }
+        // User profile
+        const userProfileArea = document.getElementById('userProfileArea');
+        if (userProfileArea) {
+            userProfileArea.addEventListener('click', function() {
+                window.location.href = 'profile.html';
+            });
+        }
+        // Sidebar dropdown logic (robust, unified)
+        const accesPersonnelToggle = document.getElementById('accesPersonnelToggle');
+        const accesPersonnelMenu = document.getElementById('accesPersonnelMenu');
+        const accesMaterielToggle = document.getElementById('accesMaterielToggle');
+        const accesMaterielMenu = document.getElementById('accesMaterielMenu');
+        const suiviProjetsToggle = document.getElementById('suiviProjetsToggle');
+        const suiviProjetsMenu = document.getElementById('suiviProjetsMenu');
+        const ajouterProjet = document.getElementById('ajouterProjet');
+
+        function closeAllDropdowns(e) {
+            if (
+                (!accesPersonnelToggle.contains(e.target) && !accesPersonnelMenu.contains(e.target)) &&
+                (!accesMaterielToggle.contains(e.target) && !accesMaterielMenu.contains(e.target)) &&
+                (!suiviProjetsToggle.contains(e.target) && !suiviProjetsMenu.contains(e.target))
+            ) {
+                accesPersonnelMenu.style.display = 'none';
+                accesMaterielMenu.style.display = 'none';
+                suiviProjetsMenu.style.display = 'none';
+            }
+        }
+
+        if (accesPersonnelToggle && accesPersonnelMenu) {
+            accesPersonnelToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                accesPersonnelMenu.style.display = accesPersonnelMenu.style.display === 'block' ? 'none' : 'block';
+                accesMaterielMenu.style.display = 'none';
+                suiviProjetsMenu.style.display = 'none';
+            });
+        }
+        if (accesMaterielToggle && accesMaterielMenu) {
+            accesMaterielToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                accesMaterielMenu.style.display = accesMaterielMenu.style.display === 'block' ? 'none' : 'block';
+                accesPersonnelMenu.style.display = 'none';
+                suiviProjetsMenu.style.display = 'none';
+            });
+        }
+        if (suiviProjetsToggle && suiviProjetsMenu) {
+            suiviProjetsToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                suiviProjetsMenu.style.display = suiviProjetsMenu.style.display === 'block' ? 'none' : 'block';
+                accesPersonnelMenu.style.display = 'none';
+                accesMaterielMenu.style.display = 'none';
+            });
+        }
+        document.addEventListener('click', closeAllDropdowns);
+        // Ajouter un projet
+        if (ajouterProjet) {
+            ajouterProjet.addEventListener('click', function() {
+                window.location.href = 'Project-form.html';
+            });
+        }
+    </script>
+</body>
+</html>
