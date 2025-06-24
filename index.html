@@ -447,6 +447,28 @@
         toggleMenu('accesPersonnelToggle', 'accesPersonnelMenu');
         toggleMenu('accesMaterielToggle', 'accesMaterielMenu');
         toggleMenu('suiviProjetsToggle', 'suiviProjetsMenu');
+
+        // Notification bell logic (toggle dropdown)
+        const notificationBell = document.querySelector('#notificationBellArea');
+        const notificationDropdown = document.querySelector('#notificationDropdown');
+        if (notificationBell && notificationDropdown) {
+            notificationBell.addEventListener('click', (e) => {
+                e.stopPropagation();
+                notificationDropdown.style.display = notificationDropdown.style.display === 'block' ? 'none' : 'block';
+            });
+            document.addEventListener('click', (e) => {
+                if (!notificationBell.contains(e.target) && !notificationDropdown.contains(e.target)) {
+                    notificationDropdown.style.display = 'none';
+                }
+            });
+        }
+        // User profile logic (redirect to profile.html)
+        const userProfileArea = document.getElementById('userProfileArea');
+        if (userProfileArea) {
+            userProfileArea.addEventListener('click', function() {
+                window.location.href = 'profile.html';
+            });
+        }
     });
     </script>
 </body>
