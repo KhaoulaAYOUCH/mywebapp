@@ -93,6 +93,7 @@
             border-radius: 18px;
             box-shadow: 0 4px 24px rgba(44,62,80,0.08);
             padding: 0 0 24px 0;
+            position: relative;
         }
         .table-header {
             background: linear-gradient(87deg, #5e72e4 0, #825ee4 100%);
@@ -240,7 +241,29 @@
             table, thead, tbody, th, td, tr { display: block; }
             thead { display: none; }
             tbody td { padding: 12px 16px; }
-        }
+        /* Filter bar styles (mobile) */
+#filterBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 30px 0 30px;
+  background: #e9f0fb;
+  border-radius: 8px;
+  padding: 0 18px;
+  min-height: 38px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+#filterBar label {
+  font-weight: 600;
+  color: #00338e;
+  margin-right: 8px;
+}
+#filterBar select {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 15px;
+}
     </style>
 </head>
 <body>
@@ -277,9 +300,13 @@
         <i class="fa fa-caret-down" style="margin-left:8px;"></i>
     </a>
     <ul id="suiviProjetsMenu" style="display:none; position:absolute; left:0; top:40px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-radius:8px; list-style:none; margin:0; padding:8px 0; min-width:210px; z-index:2000;">
-        <li id="ajouterProjet" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'" onclick="window.location.href='Project-form.html'"><i class="fa fa-plus"></i> Ajouter un projet</li>
-        <li id="mesProjets" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'"><i class="fa fa-folder-open"></i> Mes projets</li>
-    </ul>
+                            <li id="ajouterProjet" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'" onclick="window.location.href='Project-form.html'">
+                                <i class="fa fa-plus"></i> Ajouter un projet
+                            </li>
+                            <li id="mesProjets" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'" onclick="window.location.href='mes-projets.html'">
+                                <i class="fa fa-folder-open"></i> Mes projets
+                            </li>
+                        </ul>
 </li>
                 </ul>
             </nav>
@@ -311,6 +338,20 @@
             <div class="table-header">
                 <h2>Tableau des Demandes d'Accès</h2>
             </div>
+            <!-- Small clickable bar on the side -->
+            <div id="filterBar" style="position: absolute; top: 48px; right: 48px; width: 38px; height: 38px; background: linear-gradient(87deg, #5e72e4 0, #825ee4 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 4px rgba(44,62,80,0.10); border: 1px solid #d1d5db; cursor: pointer; z-index: 10;">
+                <i class="fa fa-sliders-h" style="color: #fff; font-size: 18px;"></i>
+            </div>
+            <!-- Filter dropdown (hidden by default, shown on click) -->
+            <div id="filterDropdown" style="display:none; position: absolute; top: 96px; right: 48px; background: #fff; border-radius: 10px; box-shadow: 0 2px 12px rgba(44,62,80,0.12); border: 1px solid #d1d5db; padding: 18px 22px; min-width: 220px; z-index: 20;">
+                <label for="dashboardFilter" style="font-weight:600;color:#00338e;display:block;margin-bottom:8px;">Filtrer :</label>
+                <select id="dashboardFilter" style="width:100%;padding:8px 12px;border-radius:6px;border:1px solid #d1d5db;font-size:15px;">
+                    <option value="all">Toutes les autorisations</option>
+                    <option value="attente">Approbations en attente</option>
+                    <option value="approuvee">Demandes approuvée</option>
+                    <option value="rejetee">Demandes rejetée</option>
+                </select>
+            </div>
             <table>
                 <thead>
                     <tr>
@@ -325,7 +366,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr class="demande-row" data-status="approuvee">
                         <td>1</td>
                         <td>EL Amrani</td>
                         <td>Samir</td>
@@ -335,7 +376,7 @@
                         <td><span class="status status-online">Validé</span></td>
                         <td><a class="edit-link" href="details-demande.html?id=0"><i class="fa-solid fa-eye"></i></a></td>
                     </tr>
-                    <tr>
+                    <tr class="demande-row" data-status="attente">
                         <td>2</td>
                         <td>BEN ALI</td>
                         <td>YASSINE</td>
@@ -345,7 +386,7 @@
                         <td><span class="status status-offlineWaiting">En attente</span></td>
                         <td><a class="edit-link" href="details-demande.html?id=1"><i class="fa-solid fa-eye"></i></a></td>
                     </tr>
-                    <tr>
+                    <tr class="demande-row" data-status="rejetee">
                         <TD>3</TD>
                         <td>AMINE</td>
                         <td>FATIMA</td>
@@ -640,6 +681,38 @@ const requests = [
                 window.location.href = 'Project-form.html';
             });
         }
+        // FilterBar dropdown logic
+const filterBar = document.getElementById('filterBar');
+const filterDropdown = document.getElementById('filterDropdown');
+if (filterBar && filterDropdown) {
+    filterBar.addEventListener('click', function(e) {
+        e.stopPropagation();
+        filterDropdown.style.display = (filterDropdown.style.display === 'block') ? 'none' : 'block';
+    });
+    document.addEventListener('click', function(e) {
+        if (!filterBar.contains(e.target) && !filterDropdown.contains(e.target)) {
+            filterDropdown.style.display = 'none';
+        }
+    });
+}
+// Filtering logic
+const filterSelect = document.getElementById('dashboardFilter');
+const rows = document.querySelectorAll('.demande-row');
+function showRows(type) {
+    rows.forEach(function(row) {
+        if (type === 'all' || row.dataset.status === type) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+if (filterSelect) {
+    filterSelect.addEventListener('change', function() {
+        showRows(this.value);
+    });
+    showRows('all');
+}
     </script>
 </body>
 </html>

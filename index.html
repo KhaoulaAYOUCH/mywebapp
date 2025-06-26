@@ -310,7 +310,7 @@
                 </ul>
             </nav>
         </div>
-        <button id="logoutSidebarBtn" title="Déconnexion" style="position: absolute; left: 18px; bottom: 24px; background:transparent; color:#f5365c; border:none; border-radius:50%; padding:8px; font-size:20px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center;" onclick="window.location.href='login.html'"><i class="fa-solid fa-right-from-bracket"></i></button>
+        <button id="logoutSidebarBtn" title="Déconnexion" style="position: absolute; left: 18px; bottom: 24px; background:transparent; color:#f5365c; border:none; border-radius:50%; padding:8px; font-size:20px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center;" onclick="window.location.href='logout.html'"><i class="fa-solid fa-right-from-bracket"></i></button>
     </div>
     <div class="main-content">
         <div class="navbar">Dashboard
@@ -334,22 +334,22 @@
             </div>
         </div>
         <div class="dashboard-cards">
-            <div class="dashboard-card">
+            <div class="dashboard-card" id="totalAutorisationsCard" style="cursor:pointer;">
                 <div class="icon" style="color:#5e72e4;"><i class="fa fa-list"></i></div>
                 <div class="title">Totale des autorisations</div>
                 <div class="value">254</div>
             </div>
-            <div class="dashboard-card">
+            <div class="dashboard-card" id="approbationsEnAttenteCard" style="cursor:pointer;">
                 <div class="icon" style="color:#fb6340;"><i class="fa fa-user-clock"></i></div>
                 <div class="title">Approbations en attente</div>
                 <div class="value">15</div>
             </div>
-            <div class="dashboard-card">
+            <div class="dashboard-card" id="demandesApprouveeCard" style="cursor:pointer;">
                 <div class="icon" style="color:#2dce89;"><i class="fa fa-user-check"></i></div>
                 <div class="title">Demandes approvée</div>
                 <div class="value">198</div>
             </div>            
-            <div class="dashboard-card">
+            <div class="dashboard-card" id="demandesRejeteeCard" style="cursor:pointer;">
                 <div class="icon" style="color:#f5365c;"><i class="fa fa-user-xmark"></i></div>
                 <div class="title">Demandes rejetée</div>
                 <div class="value">41</div>
@@ -475,6 +475,35 @@
             logoutSidebarBtn.addEventListener('click', function(e) {
                 e.preventDefault();
                 window.location.href = 'login.html';
+            });
+        }
+    });
+    </script>
+    <script>
+    // Dashboard cards click logic
+    document.addEventListener('DOMContentLoaded', function() {
+        var totalCard = document.getElementById('totalAutorisationsCard');
+        if (totalCard) {
+            totalCard.addEventListener('click', function() {
+                window.location.href = 'table-demandes.html';
+            });
+        }
+        var attenteCard = document.getElementById('approbationsEnAttenteCard');
+        if (attenteCard) {
+            attenteCard.addEventListener('click', function() {
+                window.location.href = 'table-demandes.html?filter=attente';
+            });
+        }
+        var approuveeCard = document.getElementById('demandesApprouveeCard');
+        if (approuveeCard) {
+            approuveeCard.addEventListener('click', function() {
+                window.location.href = 'table-demandes.html?filter=approuvee';
+            });
+        }
+        var rejeteeCard = document.getElementById('demandesRejeteeCard');
+        if (rejeteeCard) {
+            rejeteeCard.addEventListener('click', function() {
+                window.location.href = 'table-demandes.html?filter=rejetee';
             });
         }
     });

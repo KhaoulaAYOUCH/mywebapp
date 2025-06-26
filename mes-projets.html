@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Projets - JESA</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Open Sans', sans-serif;
+            background: #f8f9fe;
+        }
+        .sidebar {
+            width: 270px;
+            background: #fff;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            box-shadow: 2px 0 10px rgba(44,62,80,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .sidebar .logo {
+            font-weight: bold;
+            font-size: 18px;
+            padding: 32px 0 24px 32px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #00338e;
+        }
+        .sidebar nav {
+            flex: 1;
+        }
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar nav ul li {
+            margin-bottom: 8px;
+        }
+        .sidebar nav ul li a {
+            display: flex;
+            align-items: center;
+            padding: 12px 32px;
+            color: #003ca5fd;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .sidebar nav ul li a.active, .sidebar nav ul li a:hover {
+            background: #f6f9fc;
+        }
+        .sidebar nav ul li a i {
+            margin-right: 16px;
+            font-size: 18px;
+        }
+        .main-content {
+            margin-left: 270px;
+            min-height: 100vh;
+        }
+        .navbar {
+            background: linear-gradient(87deg, #00338e 0, #ffffff 100%);
+            color: #fff;
+            padding: 24px 40px 32px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .navbar .Logindata {
+            display: flex;
+            align-items: center;
+            gap: 100px;
+        }
+        .navbar .Logindata a{
+            color: #00338e;
+            font-weight: 1000;
+            text-decoration: none;
+            font-size: 15px;
+        }
+        .projects-header {
+            font-size: 2rem;
+            color: #00338e;
+            font-weight: 700;
+            margin: 32px 0 8px 0;
+            letter-spacing: 1px;
+        }
+        .projects-list-title {
+            font-size: 1.2rem;
+            color: #32325d;
+            font-weight: 600;
+            margin-bottom: 18px;
+        }
+        .projects-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+        .project-card {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(44,62,80,0.08);
+            width: 320px;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            transition: box-shadow 0.2s, transform 0.2s;
+            overflow: hidden;
+        }
+        .project-card:hover {
+            box-shadow: 0 8px 32px rgba(44,62,80,0.18);
+            transform: translateY(-4px) scale(1.02);
+        }
+        .project-img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            background: #f6f9fc;
+        }
+        .project-card-content {
+            padding: 18px 18px 12px 18px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        .project-card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #00338e;
+            margin-bottom: 8px;
+        }
+        .project-card-sub {
+            color: #2dce89;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .project-card-zone {
+            color: #32325d;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+        .project-card-coord {
+            color: #888;
+            font-size: 13px;
+        }
+        /* Modal for project details */
+        .project-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.18);
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+        }
+        .project-modal-content {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(44,62,80,0.18);
+            max-width: 500px;
+            width: 96vw;
+            padding: 36px 32px 24px 32px;
+            position: relative;
+            animation: fadeIn 0.5s cubic-bezier(.4,0,.2,1);
+        }
+        .project-modal-content h3 {
+            color: #00338e;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+        .project-modal-content ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 18px 0;
+        }
+        .project-modal-content li {
+            margin-bottom: 10px;
+            color: #32325d;
+            font-size: 15px;
+        }
+        .close-x {
+            position: absolute;
+            top: 12px;
+            right: 18px;
+            font-size: 26px;
+            color: #00338e;
+            cursor: pointer;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+        .close-x:hover {
+            color: #f5365c;
+        }
+        @media (max-width: 900px) {
+            .main-content { margin-left: 0; }
+            .projects-grid { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div>
+            <div class="logo"><img src="LOGOJESA.jpg" width="100" height="50"> Gestionnaire des accés</div>
+            <nav>
+                <ul>
+                    <li><a href="index.html"><i class="fa fa-tv"></i> Dashboard</a></li>
+                    <li style="position:relative;">
+                        <a href="#" id="accesPersonnelToggle" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+                            <span><i class="fa fa-address-book"></i>Accés Personnel</span>
+                            <i class="fa fa-caret-down" style="margin-left:8px;"></i>
+                        </a>
+                        <ul id="accesPersonnelMenu" style="display:none; position:absolute; left:0; top:40px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-radius:8px; list-style:none; margin:0; padding:8px 0; min-width:210px; z-index:2000;">
+                            <li id="ajouterDemandePersonnel" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'" onclick="window.location.href='acces-form.html'"><i class="fa fa-plus"></i> Ajouter une demande d'acces</li>
+                            <li id="suiviDemandesPersonnel" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'" onclick="window.location.href='table-demandes.html'"><i class="fa fa-clock"></i> Suivi des demandes d'acces</li>
+                        </ul>
+                    </li>
+                    <li style="position:relative;">
+                        <a href="#" id="accesMaterielToggle" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+                            <span><i class="fa fa-truck-field"></i>Accés Materiel</span>
+                            <i class="fa fa-caret-down" style="margin-left:8px;"></i>
+                        </a>
+                        <ul id="accesMaterielMenu" style="display:none; position:absolute; left:0; top:40px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-radius:8px; list-style:none; margin:0; padding:8px 0; min-width:210px; z-index:2000;">
+                            <li style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'"> <i class="fa fa-plus"></i> Générer un bon d'entrée-sortie</li>
+                            <li style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'"> <i class="fa fa-clock"></i> Suivi des entrée-sortie</li>
+                        </ul>
+                    </li>
+                    <li style="position:relative;">
+                        <a href="#" id="suiviProjetsToggle" class="active" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+                            <span><i class="fa fa-industry"></i>Suivi des projets</span>
+                            <i class="fa fa-caret-down" style="margin-left:8px;"></i>
+                        </a>
+                        <ul id="suiviProjetsMenu" style="display:none; position:absolute; left:0; top:40px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-radius:8px; list-style:none; margin:0; padding:8px 0; min-width:210px; z-index:2000;">
+                            <li id="ajouterProjet" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'" onclick="window.location.href='Project-form.html'"><i class="fa fa-plus"></i> Ajouter un projet</li>
+                            <li id="mesProjets" style="padding:8px 24px; cursor:pointer; color:#32325d; font-weight:500; background:#f6f9fc;" onmouseover="this.style.background='#f6f9fc'" onmouseout="this.style.background='none'" onclick="window.location.href='mes-projets.html'">
+                              <i class="fa fa-folder-open"></i> Mes projets
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <button id="logoutSidebarBtn" title="Déconnexion" style="position: absolute; left: 18px; bottom: 24px; background:transparent; color:#f5365c; border:none; border-radius:50%; padding:8px; font-size:20px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center;"><i class="fa-solid fa-right-from-bracket"></i></button>
+    </div>
+    <div class="main-content">
+        <div class="navbar">Mes Projets
+            <div class="Logindata" style="position: relative; display: flex; align-items: center; gap: 18px;">
+                <span id="userProfileArea" style="display: flex; align-items: center; gap: 8px; cursor:pointer; font-weight: 700; color: #00338e; font-size: 15px;">
+                    <i class="fa-solid fa-circle-user"></i>
+                    AYOUCH Khaoula
+                </span>
+                <span id="notificationBellArea" style="display: flex; align-items: center; gap: 4px; cursor:pointer; position:relative;">
+                    <i class="fa fa-bell" style="color:#f5365c; font-size:18px;"></i>
+                    <span id="notificationCount" style="background: #f5365c; color: #fff; border-radius: 50%; padding: 2px 7px; font-size: 12px; display: inline-block;">3</span>
+                    <div id="notificationDropdown" style="display:none; position:absolute; right:0; top:28px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-radius:8px; min-width:320px; z-index:2000; padding:0;">
+                        <div style="padding:12px 18px; border-bottom:1px solid #eee; font-weight:700; color:#00338e;">Notifications</div>
+                        <ul style="list-style:none; margin:0; padding:0;">
+                            <li style="padding:12px 18px; border-bottom:1px solid #f6f9fc; color:#32325d; display:flex; align-items:center;"><i class="fa fa-user-plus" style="color:#2dce89; margin-right:10px;"></i>Nouvelle demande d'accès soumise</li>
+                            <li style="padding:12px 18px; border-bottom:1px solid #f6f9fc; color:#32325d; display:flex; align-items:center;"><i class="fa fa-check-circle" style="color:#5e72e4; margin-right:10px;"></i>Demande approuvée</li>
+                            <li style="padding:12px 18px; color:#32325d; display:flex; align-items:center;"><i class="fa fa-times-circle" style="color:#f5365c; margin-right:10px;"></i>Demande rejetée</li>
+                        </ul>
+                    </div>
+                </span>
+            </div>
+        </div>
+        <div style="padding: 32px 40px 0 40px;">
+            <div class="projects-header">Tous les Projets</div>
+            <div class="projects-list-title">Liste des projets</div>
+            <div class="projects-grid" id="projectsGrid"></div>
+        </div>
+    </div>
+    <div class="project-modal" id="projectModal">
+        <div class="project-modal-content">
+            <span class="close-x" id="closeModal">&times;</span>
+            <h3 id="modalProjectTitle"></h3>
+            <ul id="modalProjectDetails"></ul>
+        </div>
+    </div>
+    <script>
+    // Sidebar dropdown logic (reuse from index.html)
+    document.addEventListener('DOMContentLoaded', function() {
+        function toggleMenu(toggleId, menuId) {
+            const toggle = document.getElementById(toggleId);
+            const menu = document.getElementById(menuId);
+            if (toggle && menu) {
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+                });
+            }
+        }
+        toggleMenu('accesPersonnelToggle', 'accesPersonnelMenu');
+        toggleMenu('accesMaterielToggle', 'accesMaterielMenu');
+        toggleMenu('suiviProjetsToggle', 'suiviProjetsMenu');
+        // Notification bell logic (toggle dropdown)
+        const notificationBell = document.querySelector('#notificationBellArea');
+        const notificationDropdown = document.querySelector('#notificationDropdown');
+        if (notificationBell && notificationDropdown) {
+            notificationBell.addEventListener('click', (e) => {
+                e.stopPropagation();
+                notificationDropdown.style.display = notificationDropdown.style.display === 'block' ? 'none' : 'block';
+            });
+            document.addEventListener('click', (e) => {
+                if (!notificationBell.contains(e.target) && !notificationDropdown.contains(e.target)) {
+                    notificationDropdown.style.display = 'none';
+                }
+            });
+        }
+        // User profile logic (redirect to profile.html)
+        const userProfileArea = document.getElementById('userProfileArea');
+        if (userProfileArea) {
+            userProfileArea.addEventListener('click', function() {
+                window.location.href = 'profile.html';
+            });
+        }
+        // Logout icon logic (redirect to login.html)
+        const logoutSidebarBtn = document.getElementById('logoutSidebarBtn');
+        if (logoutSidebarBtn) {
+            logoutSidebarBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = 'login.html';
+            });
+        }
+    });
+    // Project cards and modal logic
+    const projects = [
+      {
+        code: 'PRJ001',
+        intitule: 'PFC LPH Infra.',
+        zone: 'Laayoune',
+        site: 'Phosboucraa',
+        secteur: 'Minning',
+        dateDebut: '2025-01-01',
+        dateFin: '2025-12-31',
+        coordinateur: '1234 - Khaoula Ayouch',
+        image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80'
+      },
+      {
+        code: 'PRJ002',
+        intitule: 'Campus Laayoune',
+        zone: 'Laayoune',
+        site: 'Campus',
+        secteur: 'Education',
+        dateDebut: '2025-03-15',
+        dateFin: '2025-10-20',
+        coordinateur: '5678 - Khaoula Ayouch',
+        image: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80'
+      },
+      {
+        code: 'PRJ003',
+        intitule: 'Port Laayoune',
+        zone: 'Laayoune',
+        site: 'Port',
+        secteur: 'Infrastructure',
+        dateDebut: '2025-04-01',
+        dateFin: '2025-11-30',
+        coordinateur: '7890 - Khaoula Ayouch',
+        image: 'https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=600&q=80'
+      },
+      {
+        code: 'PRJ004',
+        intitule: 'Port Casablanca',
+        zone: 'Casablanca',
+        site: 'Port',
+        secteur: 'Infrastructure',
+        dateDebut: '2025-05-10',
+        dateFin: '2025-12-15',
+        coordinateur: '2345 - Khaoula Ayouch',
+        image: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80'
+      }
+    ];
+    const grid = document.getElementById('projectsGrid');
+    const modal = document.getElementById('projectModal');
+    const modalTitle = document.getElementById('modalProjectTitle');
+    const modalDetails = document.getElementById('modalProjectDetails');
+    const closeModal = document.getElementById('closeModal');
+    projects.forEach((p, idx) => {
+      const card = document.createElement('div');
+      card.className = 'project-card';
+      card.innerHTML = `
+        <img class="project-img" src="${p.image}" alt="${p.intitule}">
+        <div class="project-card-content">
+          <div class="project-card-title">${p.intitule}</div>
+          <div class="project-card-sub">${p.code}</div>
+          <div class="project-card-zone">${p.zone} - ${p.site}</div>
+          <div class="project-card-coord">${p.coordinateur}</div>
+        </div>
+      `;
+      card.onclick = function() {
+        modalTitle.textContent = p.intitule + ' (' + p.code + ')';
+        modalDetails.innerHTML = `
+          <li><strong>Zone:</strong> ${p.zone}</li>
+          <li><strong>Site:</strong> ${p.site}</li>
+          <li><strong>Secteur:</strong> ${p.secteur}</li>
+          <li><strong>Date début:</strong> ${p.dateDebut}</li>
+          <li><strong>Date fin:</strong> ${p.dateFin}</li>
+          <li><strong>Coordinateur:</strong> ${p.coordinateur}</li>
+        `;
+        modal.style.display = 'flex';
+      };
+      grid.appendChild(card);
+    });
+    closeModal.onclick = function() {
+      modal.style.display = 'none';
+    };
+    window.onclick = function(event) {
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    };
+    </script>
+</body>
+</html>
